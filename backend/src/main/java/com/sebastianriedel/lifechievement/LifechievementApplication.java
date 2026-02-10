@@ -1,4 +1,4 @@
-package com.sebastianriedel.backend;
+package com.sebastianriedel.lifechievement;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
