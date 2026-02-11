@@ -1,6 +1,13 @@
 package com.sebastianriedel.lifechievement.task;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
+@Entity
 public class Task {
+    @Id
+    @GeneratedValue
     private Long id;
     private String description;
     private int points;
@@ -8,16 +15,19 @@ public class Task {
 
 
     //Constructor
-    public Task(Long id, String description, int points, boolean status){
-        this.id = id;
+    public Task(){
+    }
+
+    public Task(String description, int points, boolean status){
         this.description = description;
         this.points = points;
         this.status = status;
     }
 
+
+
     //Getter & Setter
     public Long getId() {return id;}
-    public void setId(Long id) {this.id = id;}
 
     public String getDescription() {return description;}
     public void setDescription(String description) {this.description = description;}
