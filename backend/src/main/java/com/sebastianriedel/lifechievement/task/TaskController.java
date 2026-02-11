@@ -1,6 +1,9 @@
 package com.sebastianriedel.lifechievement.task;
 
 
+import com.sebastianriedel.lifechievement.task.dto.TaskCreateDTO;
+import com.sebastianriedel.lifechievement.task.dto.TaskResponseDTO;
+import com.sebastianriedel.lifechievement.task.dto.TaskUpdateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,18 +17,18 @@ public class TaskController {
     TaskService taskService;
 
     @GetMapping
-    public List<Task> getTasks(){
+    public List<TaskResponseDTO> getTasks(){
        return taskService.getAllTasks();
     }
 
     @PostMapping
-    public void createTask(@RequestBody Task task) {
-        taskService.createTask(task);
+    public void createTask(@RequestBody TaskCreateDTO dto) {
+        taskService.createTask(dto);
     }
 
     @PutMapping("/{id}")
-    public void updateTask(@RequestBody Task task, @PathVariable Long id){
-        taskService.updateTask(task, id);
+    public void updateTask(@RequestBody TaskUpdateDTO dto, @PathVariable Long id){
+        taskService.updateTask(dto, id);
     }
 
     @DeleteMapping("/{id}")
