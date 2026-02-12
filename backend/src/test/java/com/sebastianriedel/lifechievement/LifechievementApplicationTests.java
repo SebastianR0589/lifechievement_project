@@ -1,4 +1,4 @@
-package com.sebastianriedel.backend;
+package com.sebastianriedel.lifechievement;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
