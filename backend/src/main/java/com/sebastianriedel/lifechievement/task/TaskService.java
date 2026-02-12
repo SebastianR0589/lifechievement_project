@@ -1,5 +1,6 @@
 package com.sebastianriedel.lifechievement.task;
 
+import com.sebastianriedel.lifechievement.task.ExceptionHandling.TaskNotFoundException;
 import com.sebastianriedel.lifechievement.task.dto.TaskCreateDTO;
 import com.sebastianriedel.lifechievement.task.dto.TaskResponseDTO;
 import com.sebastianriedel.lifechievement.task.dto.TaskUpdateDTO;
@@ -28,6 +29,20 @@ public class TaskService {
                 .toList();
     }
 
+    public TaskResponseDTO getTaskById(Long id) {
+
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
+
+        return new TaskResponseDTO(
+                task.getId(),
+                task.getDescription(),
+                task.getPoints(),
+                task.isStatus()
+        );
+    }
+
+
 
     public void createTask(TaskCreateDTO dto) {
 
@@ -41,8 +56,8 @@ public class TaskService {
 
 
     public void updateTask(TaskUpdateDTO dto, Long id) {
-        Optional<Task> optionalTask = taskRepository.findById(id);
-        Task existingTask = optionalTask.get();
+        Task existingTask = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
         existingTask.setDescription(dto.getDescription());
         existingTask.setPoints(dto.getPoints());
         existingTask.setStatus(dto.isStatus());
@@ -53,7 +68,7 @@ public class TaskService {
         if (taskRepository.existsById(id)) {
             taskRepository.deleteById(id);
         } else {
-            System.out.println("Task mit ID " + id + " existiert nicht.");
+            System.out.println("Task with " + id + " doesn't exist.");
         }
     }
 
