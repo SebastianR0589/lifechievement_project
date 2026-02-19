@@ -15,27 +15,43 @@ public class Task {
 
 
     //Constructor
-    public Task(){
+    public Task() {
     }
 
-    public Task(String description, int points, boolean status){
+    public Task(String description, int points, boolean status) {
         this.description = description;
         this.points = points;
         this.status = status;
     }
 
 
-
     //Getter & Setter
-    public Long getId() {return id;}
+    public Long getId() {
+        return id;
+    }
 
-    public String getDescription() {return description;}
-    public void setDescription(String description) {this.description = description;}
+    public String getDescription() {
+        return description;
+    }
 
-    public int getPoints() {return points;}
-    public void setPoints(int points) {this.points = points;}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public boolean isStatus() {return status;}
-    public void setStatus(boolean status) {this.status = status;}
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 
 }

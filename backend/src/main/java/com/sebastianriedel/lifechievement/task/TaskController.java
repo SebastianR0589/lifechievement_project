@@ -18,13 +18,14 @@ public class TaskController {
     TaskService taskService;
 
     @GetMapping
-    public List<TaskResponseDTO> getTasks(){
-       return taskService.getAllTasks();
+    public List<TaskResponseDTO> getTasks() {
+        return taskService.getAllTasks();
     }
 
     @GetMapping("/{id}")
-    public TaskResponseDTO getTaskByID(@PathVariable Long id)
-    {return taskService.getTaskById(id);}
+    public TaskResponseDTO getTaskByID(@PathVariable Long id) {
+        return taskService.getTaskById(id);
+    }
 
     @PostMapping
     public void createTask(@Valid @RequestBody TaskCreateDTO dto) {
@@ -32,12 +33,12 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public void updateTask(@Valid @RequestBody TaskUpdateDTO dto, @PathVariable Long id){
+    public void updateTask(@Valid @RequestBody TaskUpdateDTO dto, @PathVariable Long id) {
         taskService.updateTask(dto, id);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTask(@PathVariable Long id){
+    public void deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
     }
 }
