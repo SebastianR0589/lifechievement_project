@@ -3,11 +3,7 @@ package com.sebastianriedel.lifechievement.reward;
 import com.sebastianriedel.lifechievement.reward.dto.RewardCreaetDTO;
 import com.sebastianriedel.lifechievement.reward.dto.RewardResponseDTO;
 import com.sebastianriedel.lifechievement.reward.dto.RewardUpdateDTO;
-import com.sebastianriedel.lifechievement.task.ExceptionHandling.TaskNotFoundException;
-import com.sebastianriedel.lifechievement.task.Task;
-import com.sebastianriedel.lifechievement.task.dto.TaskCreateDTO;
-import com.sebastianriedel.lifechievement.task.dto.TaskResponseDTO;
-import com.sebastianriedel.lifechievement.task.dto.TaskUpdateDTO;
+import com.sebastianriedel.lifechievement.reward.ExceptionHandling.RewardNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
