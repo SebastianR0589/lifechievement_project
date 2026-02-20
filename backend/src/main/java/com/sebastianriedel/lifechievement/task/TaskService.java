@@ -43,14 +43,14 @@ public class TaskService {
     }
 
 
-    public void createTask(TaskCreateDTO dto) {
+    public Task createTask(TaskCreateDTO dto) {
 
         Task task = new Task();
         task.setDescription(dto.getDescription());
         task.setPoints(dto.getPoints());
         task.setStatus(dto.isStatus());
 
-        taskRepository.save(task);
+        return taskRepository.save(task);
     }
 
 

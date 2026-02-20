@@ -28,8 +28,14 @@ public class RewardController {
     }
 
     @PostMapping
-    public void createReward(@Valid @RequestBody RewardCreaetDTO dto) {
-        rewardService.createReward(dto);
+    public RewardResponseDTO createReward(@Valid @RequestBody RewardCreaetDTO dto) {
+        Reward reward = rewardService.createReward(dto);
+        return new RewardResponseDTO(
+                reward.getId(),
+                reward.getDescription(),
+                reward.getCost(),
+                reward.getRedeemed()
+        );
     }
 
     @PutMapping("{id}")

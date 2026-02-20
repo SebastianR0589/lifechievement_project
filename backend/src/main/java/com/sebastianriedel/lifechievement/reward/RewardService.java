@@ -26,13 +26,13 @@ public class RewardService {
         return new RewardResponseDTO(reward.getId(), reward.getDescription(), reward.getCost(), reward.getRedeemed());
     }
 
-    public void createReward(RewardCreaetDTO dto) {
+    public Reward createReward(RewardCreaetDTO dto) {
         Reward reward = new Reward();
         reward.setDescription(dto.getDescription());
         reward.setCost(dto.getCost());
         reward.setRedeemed(dto.getRedeemed());
 
-        rewardRepository.save(reward);
+        return rewardRepository.save(reward);
     }
 
     public void updateReward(RewardUpdateDTO dto, Long id) {

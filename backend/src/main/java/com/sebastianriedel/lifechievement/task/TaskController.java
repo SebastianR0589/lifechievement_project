@@ -28,8 +28,14 @@ public class TaskController {
     }
 
     @PostMapping
-    public void createTask(@Valid @RequestBody TaskCreateDTO dto) {
-        taskService.createTask(dto);
+    public TaskResponseDTO createTask(@Valid @RequestBody TaskCreateDTO dto) {
+        Task task = taskService.createTask(dto);
+        return new TaskResponseDTO(
+                task.getId(),
+                task.getDescription(),
+                task.getPoints(),
+                task.isStatus()
+        );
     }
 
     @PutMapping("/{id}")
