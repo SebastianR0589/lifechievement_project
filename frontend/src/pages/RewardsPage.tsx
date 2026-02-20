@@ -65,6 +65,7 @@ export default function RewardsPage() {
           <p>{reward.description}</p>
           <p>{reward.cost}</p>
           <p>{reward.redeemed ? "Redeemed" : "Not redeemed"}</p>
+           <button onClick={() => axios.delete(`http://localhost:8080/api/rewards/${reward.id}`).then(() => setRewards(rewards.filter((r) => r.id !== reward.id)))}>Delete Reward</button>
         </div>
       ))}
     </div>

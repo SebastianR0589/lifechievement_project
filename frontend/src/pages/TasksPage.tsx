@@ -35,6 +35,7 @@ export default function TasksPage() {
       setPoints(0);
     });
   };
+  
 
   return (
     <div>
@@ -66,6 +67,7 @@ export default function TasksPage() {
           <p>{task.description}</p>
           <p>{task.points}</p>
           <p>{task.status ? "Completed" : "Not completed"}</p>
+          <button onClick={() => axios.delete(`http://localhost:8080/api/tasks/${task.id}`).then(() => setTasks(tasks.filter((t) => t.id !== task.id)))}>Delete Task</button>
         </div>
       ))}
     </div>
