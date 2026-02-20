@@ -46,13 +46,12 @@ public class Reward {
         this.cost = cost;
     }
 
-    public boolean getRedeemed() {
+    public boolean isRedeemed() {
         return redeemed;
     }
 
     public void setRedeemed(boolean redeemed) {
         this.redeemed = redeemed;
     }
-
 
 }

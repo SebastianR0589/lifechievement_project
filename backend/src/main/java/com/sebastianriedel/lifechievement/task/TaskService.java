@@ -54,13 +54,14 @@ public class TaskService {
     }
 
 
-    public void updateTask(TaskUpdateDTO dto, Long id) {
+    public Task updateTask(TaskUpdateDTO dto, Long id) {
         Task existingTask = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
         existingTask.setDescription(dto.getDescription());
         existingTask.setPoints(dto.getPoints());
         existingTask.setStatus(dto.isStatus());
-        taskRepository.save(existingTask);
+
+        return taskRepository.save(existingTask);
     }
 
     public void deleteTask(Long id) {

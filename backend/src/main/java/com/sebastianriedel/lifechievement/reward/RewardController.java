@@ -34,13 +34,19 @@ public class RewardController {
                 reward.getId(),
                 reward.getDescription(),
                 reward.getCost(),
-                reward.getRedeemed()
+                reward.isRedeemed()
         );
     }
 
     @PutMapping("{id}")
-    public void updateReward(@Valid @RequestBody RewardUpdateDTO dto, @PathVariable Long id) {
-        rewardService.updateReward(dto, id);
+    public RewardResponseDTO updateReward(@Valid @RequestBody RewardUpdateDTO dto, @PathVariable Long id) {
+        Reward reward = rewardService.updateReward(dto, id);
+        return new RewardResponseDTO(
+                reward.getId(),
+                reward.getDescription(),
+                reward.getCost(),
+                reward.isRedeemed()
+        );
     }
 
     @DeleteMapping("{id}")

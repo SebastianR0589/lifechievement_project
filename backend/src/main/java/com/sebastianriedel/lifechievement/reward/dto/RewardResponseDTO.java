@@ -28,7 +28,7 @@ public class RewardResponseDTO {
         return cost;
     }
 
-    public boolean getRedeemed() {
+    public boolean isRedeemed() {
         return redeemed;
     }
 

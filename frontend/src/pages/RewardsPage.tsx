@@ -35,6 +35,13 @@ export default function RewardsPage() {
         });
       };
 
+      const handleRedeemToggle = (reward: Reward) => {
+        const updatedReward = { ...reward, redeemed: !reward.redeemed };
+        axios.put(`http://localhost:8080/api/rewards/${reward.id}`, updatedReward).then((response) => {
+          setRewards(rewards.map((r) => (r.id === reward.id ? response.data : r)));
+        });
+      };
+
       return (
        <div>
       <h1>Rewards</h1>
@@ -66,6 +73,7 @@ export default function RewardsPage() {
           <p>{reward.cost}</p>
           <p>{reward.redeemed ? "Redeemed" : "Not redeemed"}</p>
            <button onClick={() => axios.delete(`http://localhost:8080/api/rewards/${reward.id}`).then(() => setRewards(rewards.filter((r) => r.id !== reward.id)))}>Delete Reward</button>
+          <button onClick={() => handleRedeemToggle(reward)}>Toggle Redeem</button>
         </div>
       ))}
     </div>

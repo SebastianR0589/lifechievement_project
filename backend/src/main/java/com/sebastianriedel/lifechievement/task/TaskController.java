@@ -39,8 +39,13 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public void updateTask(@Valid @RequestBody TaskUpdateDTO dto, @PathVariable Long id) {
-        taskService.updateTask(dto, id);
+    public TaskResponseDTO updateTask(@Valid @RequestBody TaskUpdateDTO dto, @PathVariable Long id) {
+       Task task = taskService.updateTask(dto, id);
+       return new TaskResponseDTO(    task.getId(),
+               task.getDescription(),
+               task.getPoints(),
+               task.isStatus()
+       );
     }
 
     @DeleteMapping("/{id}")
