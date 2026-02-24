@@ -12,6 +12,7 @@ export default function TasksPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [description, setDescription] = useState("");
   const [points, setPoints] = useState(0);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
 
   useEffect(() => {
     axios.get("http://localhost:8080/api/tasks").then((response) => {
@@ -43,6 +44,35 @@ export default function TasksPage() {
     });
   };
 
+ const handleDelete = (taskId: number) => {
+    axios.delete(`http://localhost:8080/api/tasks/${taskId}`).then(() => {
+      setTasks(tasks.filter((t) => t.id !== taskId));
+    });
+  };
+
+const handleSave = async () => {
+  if (!editingTask) return;
+
+  try {
+    const response = await axios.put(
+      `http://localhost:8080/api/tasks/${editingTask.id}`,
+      editingTask
+    );
+
+    // Den Task im State aktualisieren
+    setTasks(prev =>
+      prev.map(task => (task.id === editingTask.id ? response.data : task))
+    );
+
+    // Formular schließen
+    setEditingTask(null);
+  } catch (err) {
+    console.error("Fehler beim Speichern:", err);
+  }
+};
+
+
+  
   return (
     <div>
       <h1>Tasks</h1>
@@ -68,15 +98,37 @@ export default function TasksPage() {
         </div>
         <button type="submit">Add Task</button>
       </form>
-      {tasks.map((task) => (
-        <div key={task.id}>
-          <p>{task.description}</p>
-          <p>{task.points}</p>
-          <p>{task.status ? "Completed" : "Not completed"}</p>
-          <button onClick={() => axios.delete(`http://localhost:8080/api/tasks/${task.id}`).then(() => setTasks(tasks.filter((t) => t.id !== task.id)))}>Delete Task</button>
-          <button onClick={() => handleStatusToggle(task)}>Toggle Status</button>
-        </div>
-      ))}
+
+{tasks.map(task => (
+  <div key={task.id}>
+    {editingTask?.id === task.id ? (
+      // Form für Edit
+      <>
+        <input
+          value={editingTask.description}
+          onChange={e => setEditingTask({...editingTask, description: e.target.value})}
+        />
+        <input
+          type="number"
+          value={editingTask.points}
+          onChange={e => setEditingTask({...editingTask, points: Number(e.target.value)})}
+        />
+        <button onClick={handleSave}>Save</button>
+      </>
+    ) : (
+      // Normale Darstellung
+      <>
+        <p>{task.description}</p>
+        <p>{task.points}</p>
+        <p>{task.status ? "Completed" : "Not completed"}</p>
+        <button onClick={() => setEditingTask(task)}>Edit</button>
+        <button onClick={() => handleStatusToggle(task)}>Toggle Status</button>
+        <button onClick={() => handleDelete(task.id)}>Delete Task</button>
+      </>
+    )}
+  </div>
+))}
     </div>
   );
 }
+

@@ -13,6 +13,7 @@ export default function RewardsPage() {
     const [rewards, setRewards] = useState<Reward[]>([]);
     const [description, setDescription] = useState("");
     const [cost, setCost] = useState(0);
+    const [editingReward, setEditingReward] = useState<Reward | null>(null);
 
     useEffect(() => {axios.get("http://localhost:8080/api/rewards").then((response) => {
         setRewards(response.data);
@@ -35,12 +36,37 @@ export default function RewardsPage() {
         });
       };
 
+    
+
       const handleRedeemToggle = (reward: Reward) => {
         const updatedReward = { ...reward, redeemed: !reward.redeemed };
         axios.put(`http://localhost:8080/api/rewards/${reward.id}`, updatedReward).then((response) => {
           setRewards(rewards.map((r) => (r.id === reward.id ? response.data : r)));
         });
       };
+
+        const handleDelete = (rewardId: number) => {
+        axios.delete(`http://localhost:8080/api/rewards/${rewardId}`).then(() => {
+          setRewards(rewards.filter((r) => r.id !== rewardId));
+        });
+      };
+
+
+        const handleSave = async () => {
+          if (!editingReward) return;
+
+          try {
+            const response = await axios.put(
+              `http://localhost:8080/api/rewards/${editingReward.id}`, editingReward
+            );
+            setRewards(rewards.map((r) => (r.id === editingReward.id ? response.data : r)));
+            setEditingReward(null);
+          } catch (error) {
+            console.error("Error updating reward:", error);
+          } 
+        };
+
+
 
       return (
        <div>
@@ -67,15 +93,35 @@ export default function RewardsPage() {
         </div>
         <button type="submit">Add Reward</button>
       </form>
-      {rewards.map((reward) => (
-        <div key={reward.id}>
-          <p>{reward.description}</p>
-          <p>{reward.cost}</p>
-          <p>{reward.redeemed ? "Redeemed" : "Not redeemed"}</p>
-           <button onClick={() => axios.delete(`http://localhost:8080/api/rewards/${reward.id}`).then(() => setRewards(rewards.filter((r) => r.id !== reward.id)))}>Delete Reward</button>
-          <button onClick={() => handleRedeemToggle(reward)}>Toggle Redeem</button>
-        </div>
-      ))}
+{rewards.map(reward => (
+  <div key={reward.id}>
+    {editingReward?.id === reward.id ? (
+
+      <>
+        <input
+          value={editingReward.description}
+          onChange={e => setEditingReward({...editingReward, description: e.target.value})}
+        />
+        <input
+          type="number"
+          value={editingReward.cost}
+          onChange={e => setEditingReward({...editingReward, cost: Number(e.target.value)})}
+        />
+        <button onClick={handleSave}>Save</button>
+      </>
+    ) : (
+
+      <>
+        <p>{reward.description}</p>
+        <p>{reward.cost}</p>
+        <p>{reward.redeemed ? "Redeemed" : "Not redeemed"}</p>
+        <button onClick={() => setEditingReward(reward)}>Edit</button>
+        <button onClick={() => handleRedeemToggle(reward)}>Toggle Redeemed</button>
+        <button onClick={() => handleDelete(reward.id)}>Delete Reward</button>
+      </>
+    )}
+  </div>
+))}
     </div>
   );
 }
