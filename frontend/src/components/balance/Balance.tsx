@@ -1,13 +1,11 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+  type BalanceProps = {
+    balance: number;
+  }
 
-export default function Balance(){
-    const [balance, setBalance] = useState(0);
-
-    useEffect(() => {axios.get("http://localhost:8080/api/balance").then((response) => {setBalance(response.data)})})
+export default function Balance({ balance }: BalanceProps) {
 
     return (
-        <div>{balance}</div>
+        <div>Balance: {balance}</div>
     )
 
 }
