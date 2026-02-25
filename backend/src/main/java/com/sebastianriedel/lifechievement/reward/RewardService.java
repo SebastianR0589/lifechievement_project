@@ -49,25 +49,29 @@ public class RewardService {
 
         boolean newStatus = dto.isRedeemed();
 
-        if(balanceService.getBalance() >= dto.getCost()) {
-            if (!oldStatus && newStatus) {
-                balanceService.updateBalance(-existingReward.getCost());
+
+        if (!oldStatus && newStatus) {
+            if (balanceService.getBalance() < dto.getCost()) {
+                throw new IllegalStateException("Balance too low");
             }
 
-            if (oldStatus && !newStatus) {
-                balanceService.updateBalance(existingReward.getCost());
-            }
-        }else { System.out.println("Balance too low");}
+            balanceService.updateBalance(-existingReward.getCost());
+        }
+
+        if (oldStatus && !newStatus) {
+            balanceService.updateBalance(existingReward.getCost());
+        }
 
         return rewardRepository.save(existingReward);
     }
+
 
     public void deleteReward(Long id) {
         if (rewardRepository.existsById(id)) {
             rewardRepository.deleteById(id);
 
         } else {
-            System.out.println("Rewar with" + id + " doesn't exist");
+            System.out.println("Reward with" + id + " doesn't exist");
         }
     }
 

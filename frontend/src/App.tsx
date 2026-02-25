@@ -1,15 +1,27 @@
-import { BrowserRouter as Router, Routes, Route, Link, BrowserRouter } from 'react-router-dom';
-import { useState } from 'react'
+import { BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
+import { useState, useEffect } from "react";
+import axios from "axios";
 import TasksPage from './pages/TasksPage';
 import RewardsPage from './pages/RewardsPage';
 import './App.css'
+import Header from './components/header/Header';
+import Balance from './components/balance/Balance';
 
 
 function App() {
 
+  const [balance, setBalance] = useState(0);
+
+  function updateBalance() {
+    axios.get("http://localhost:8080/api/balance").then((response) => {
+      setBalance(response.data);
+    });
+  }
 
   return (
-    <BrowserRouter>
+    <>
+    <Header />
+    <Balance balance={balance} />  
       <div className="App">
         <nav>
           <ul>
@@ -18,11 +30,11 @@ function App() {
           </ul>
         </nav>
         <Routes>
-          <Route path="/tasks" element={<TasksPage />} />
-          <Route path="/rewards" element={<RewardsPage />} />
+          <Route path="/tasks" element={<TasksPage onUpdate={updateBalance} />} />
+          <Route path="/rewards" element={<RewardsPage onUpdate={updateBalance}/>} />
         </Routes>
       </div>
-    </BrowserRouter>
+    </>
   )
 }
 

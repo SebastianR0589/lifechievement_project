@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function TasksPage() {
   interface Task {
     id: number;
     description: string;
     points: number;
     status: boolean;
   }
+
+  type PageProps = {
+  onUpdate: () => void;
+};
+
+export default function TasksPage({ onUpdate }: PageProps) {
+
 
   const [tasks, setTasks] = useState<Task[]>([]);
   const [description, setDescription] = useState("");
@@ -41,6 +47,7 @@ export default function TasksPage() {
     const updatedTask = { ...task, status: !task.status };
     axios.put(`http://localhost:8080/api/tasks/${task.id}`, updatedTask).then((response) => {
       setTasks(tasks.map((t) => (t.id === task.id ? response.data : t)));
+        onUpdate();
     });
   };
 
@@ -102,7 +109,7 @@ const handleSave = async () => {
 {tasks.map(task => (
   <div key={task.id}>
     {editingTask?.id === task.id ? (
-      // Form für Edit
+
       <>
         <input
           value={editingTask.description}
@@ -116,7 +123,7 @@ const handleSave = async () => {
         <button onClick={handleSave}>Save</button>
       </>
     ) : (
-      // Normale Darstellung
+
       <>
         <p>{task.description}</p>
         <p>{task.points}</p>

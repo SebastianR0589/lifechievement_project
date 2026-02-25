@@ -1,14 +1,20 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-
-export default function RewardsPage() {
   interface Reward {
     id: number;
     description: string;
     cost: number;
     redeemed: boolean;
   }
+
+  type PageProps = {
+  onUpdate: () => void;
+};
+
+
+export default function RewardsPage({ onUpdate }: PageProps) {
+
 
     const [rewards, setRewards] = useState<Reward[]>([]);
     const [description, setDescription] = useState("");
@@ -42,6 +48,7 @@ export default function RewardsPage() {
         const updatedReward = { ...reward, redeemed: !reward.redeemed };
         axios.put(`http://localhost:8080/api/rewards/${reward.id}`, updatedReward).then((response) => {
           setRewards(rewards.map((r) => (r.id === reward.id ? response.data : r)));
+            onUpdate();
         });
       };
 
