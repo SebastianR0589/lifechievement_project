@@ -28,7 +28,7 @@ public class RewardUpdateDTO {
         this.cost = cost;
     }
 
-    public boolean getRedeemed() {
+    public boolean isRedeemed() {
         return redeemed;
     }
 

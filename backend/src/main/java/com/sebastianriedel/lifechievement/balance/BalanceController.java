@@ -10,12 +10,12 @@ public class BalanceController {
     BalanceService balanceService;
 
     @GetMapping
-    public Long getBalance() {
+    public int getBalance() {
         return balanceService.getBalance();
     }
 
     @PutMapping
-    public Long updateBalance(@RequestParam Long delta) {
+    public int updateBalance(@RequestParam int delta) {
         return balanceService.updateBalance(delta);
     }
 

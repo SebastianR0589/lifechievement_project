@@ -30,7 +30,7 @@ public class RewardCreaetDTO {
         this.cost = cost;
     }
 
-    public boolean getRedeemed() {
+    public boolean isRedeemed() {
         return redeemed;
     }
 

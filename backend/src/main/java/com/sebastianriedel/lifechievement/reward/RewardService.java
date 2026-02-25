@@ -1,5 +1,6 @@
 package com.sebastianriedel.lifechievement.reward;
 
+import com.sebastianriedel.lifechievement.balance.BalanceService;
 import com.sebastianriedel.lifechievement.reward.dto.RewardCreaetDTO;
 import com.sebastianriedel.lifechievement.reward.dto.RewardResponseDTO;
 import com.sebastianriedel.lifechievement.reward.dto.RewardUpdateDTO;
@@ -13,6 +14,8 @@ import java.util.List;
 public class RewardService {
     @Autowired
     RewardRepository rewardRepository;
+    @Autowired
+    BalanceService balanceService;
 
     public List<RewardResponseDTO> getAllRewards() {
         List<Reward> rewards = rewardRepository.findAll();
@@ -30,16 +33,29 @@ public class RewardService {
         Reward reward = new Reward();
         reward.setDescription(dto.getDescription());
         reward.setCost(dto.getCost());
-        reward.setRedeemed(dto.getRedeemed());
+        reward.setRedeemed(dto.isRedeemed());
 
         return rewardRepository.save(reward);
     }
 
     public Reward updateReward(RewardUpdateDTO dto, Long id) {
         Reward existingReward = rewardRepository.findById(id).orElseThrow(() -> new RewardNotFoundException(id));
+
+        boolean oldStatus = existingReward.isRedeemed();
+
         existingReward.setDescription(dto.getDescription());
         existingReward.setCost(dto.getCost());
-        existingReward.setRedeemed(dto.getRedeemed());
+        existingReward.setRedeemed(dto.isRedeemed());
+
+        boolean newStatus = dto.isRedeemed();
+
+        if (!oldStatus && newStatus) {
+            balanceService.updateBalance(-existingReward.getCost());
+        }
+
+        if (oldStatus && !newStatus) {
+            balanceService.updateBalance(existingReward.getCost());
+        }
 
         return rewardRepository.save(existingReward);
     }

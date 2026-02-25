@@ -8,12 +8,12 @@ public class BalanceService {
     @Autowired
     BalanceRepository balanceRepository;
 
-    public Long getBalance() {
-        return balanceRepository.findById(1L).orElse(new Balance(0L)).getBalance();
+    public int getBalance() {
+        return balanceRepository.findById(1L).orElse(new Balance(0)).getBalance();
     }
 
-    public Long updateBalance(Long delta) {
-        Balance balance = balanceRepository.findById(1L).orElse(new Balance(0L));
+    public int updateBalance(int delta) {
+        Balance balance = balanceRepository.findById(1L).orElse(new Balance(0));
         balance.setBalance(balance.getBalance() + delta);
         balanceRepository.save(balance);
         return balance.getBalance();

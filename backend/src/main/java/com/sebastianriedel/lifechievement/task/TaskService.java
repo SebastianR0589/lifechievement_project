@@ -1,5 +1,6 @@
 package com.sebastianriedel.lifechievement.task;
 
+import com.sebastianriedel.lifechievement.balance.BalanceService;
 import com.sebastianriedel.lifechievement.task.ExceptionHandling.TaskNotFoundException;
 import com.sebastianriedel.lifechievement.task.dto.TaskCreateDTO;
 import com.sebastianriedel.lifechievement.task.dto.TaskResponseDTO;
@@ -14,6 +15,8 @@ import java.util.Optional;
 public class TaskService {
     @Autowired
     TaskRepository taskRepository;
+    @Autowired
+    BalanceService balanceService;
 
     public List<TaskResponseDTO> getAllTasks() {
 
@@ -57,9 +60,21 @@ public class TaskService {
     public Task updateTask(TaskUpdateDTO dto, Long id) {
         Task existingTask = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
+
+        boolean oldStatus = existingTask.isStatus();
+
         existingTask.setDescription(dto.getDescription());
         existingTask.setPoints(dto.getPoints());
         existingTask.setStatus(dto.isStatus());
+
+        boolean newStatus = dto.isStatus();
+
+        if (!oldStatus && newStatus) {
+            balanceService.updateBalance(existingTask.getPoints());
+        }
+        if (oldStatus && !newStatus) {
+            balanceService.updateBalance(-existingTask.getPoints());
+        }
 
         return taskRepository.save(existingTask);
     }

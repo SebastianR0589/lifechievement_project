@@ -8,23 +8,23 @@ public class Balance {
     @Id
     private Long id = 1L;
 
-    private Long balance;
+    private int balance;
 
     //Constructor
     public Balance() {
-        this.balance = 0L;
+        this.balance = 0;
     }
 
-    public Balance(Long balance) {
+    public Balance(int balance) {
         this.balance = balance;
     }
 
     //Getter & Setter
-    public Long getBalance() {
+    public int getBalance() {
         return balance;
     }
 
-    public void setBalance(Long balance) {
+    public void setBalance(int balance) {
         this.balance = balance;
     }
 }
