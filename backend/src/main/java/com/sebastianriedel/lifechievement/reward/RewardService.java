@@ -49,13 +49,15 @@ public class RewardService {
 
         boolean newStatus = dto.isRedeemed();
 
-        if (!oldStatus && newStatus) {
-            balanceService.updateBalance(-existingReward.getCost());
-        }
+        if(balanceService.getBalance() >= dto.getCost()) {
+            if (!oldStatus && newStatus) {
+                balanceService.updateBalance(-existingReward.getCost());
+            }
 
-        if (oldStatus && !newStatus) {
-            balanceService.updateBalance(existingReward.getCost());
-        }
+            if (oldStatus && !newStatus) {
+                balanceService.updateBalance(existingReward.getCost());
+            }
+        }else { System.out.println("Balance too low");}
 
         return rewardRepository.save(existingReward);
     }
