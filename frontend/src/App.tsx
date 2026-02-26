@@ -1,9 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import axios from "axios";
 import TasksPage from './pages/TasksPage';
 import RewardsPage from './pages/RewardsPage';
-import './App.css'
 import Header from './components/header/Header';
 import Balance from './components/balance/Balance';
 
@@ -19,9 +18,10 @@ function App() {
   }
 
   return (
-    <>
+   <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
     <Header />
     <Balance balance={balance} />  
+    <main className="flex-1 max-w-6xl mx-auto w-full px-6 py-10">
       <div className="App">
         <nav>
           <ul>
@@ -34,7 +34,8 @@ function App() {
           <Route path="/rewards" element={<RewardsPage onUpdate={updateBalance}/>} />
         </Routes>
       </div>
-    </>
+      </main>
+    </div>
   )
 }
 
