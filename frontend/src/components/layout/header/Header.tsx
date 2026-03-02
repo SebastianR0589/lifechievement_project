@@ -1,7 +1,15 @@
-export default function Header() {
+
+import Balance from "../../ui/balance/Balance";
+
+interface HeaderProps {
+  balance: number;
+}
+
+export default function Header({ balance}: HeaderProps) {
+  
   return (
-  <header className="bg-slate-950 h-24 border-b-4 border-cyan-500 relative flex items-center">
-     <div className="absolute left-0 h-full flex items-center pl-4">
+<header className="bg-slate-950 h-24 border-b-4 border-cyan-500 relative">
+  <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center">
  <svg
       viewBox="000 0 700 300"
       fill="none"
@@ -78,7 +86,8 @@ export default function Header() {
     </svg>
     </div>
       <h1
-       className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl text-neonPink"
+        
+   className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl text-neonPink font-neonderthaw text-center"
         style={{
           textShadow: `
             0 0 5px #ff00ff,
@@ -92,6 +101,7 @@ export default function Header() {
       >
         Lifechievement
       </h1>
+     <Balance balance={balance} />  
       <style>
         {`
           @keyframes flicker {

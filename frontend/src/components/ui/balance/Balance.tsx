@@ -1,74 +1,99 @@
-  import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
- type FlashType = "gain" | "loss" | null;
-  
-  type BalanceProps = {
-    balance: number;
-  }
+type FlashType = "gain" | "loss" | null;
+
+type BalanceProps = {
+  balance: number;
+};
 
 export default function Balance({ balance }: BalanceProps) {
-
-   const prevbalance = useRef(balance);
+  const prevBalance = useRef(balance);
   const [flash, setFlash] = useState<FlashType>(null);
 
   useEffect(() => {
-    if (balance > prevbalance.current) {
+    if (balance > prevBalance.current) {
       setFlash("gain");
-    } else if (balance < prevbalance.current) {
+    } else if (balance < prevBalance.current) {
       setFlash("loss");
+    } else {
+      setFlash(null);
     }
 
-    prevbalance.current = balance;
-
-    if (balance !== prevbalance.current) return;
-
+    // Flash für 500ms sichtbar lassen
     const timeout = setTimeout(() => {
       setFlash(null);
+      prevBalance.current = balance; // erst danach prevBalance aktualisieren
     }, 500);
 
     return () => clearTimeout(timeout);
   }, [balance]);
 
   return (
-    <div className="flex justify-center mt-10">
-      <div
-        className={`
-          px-10 py-6
-          rounded-2xl
-          border-2 border-cyan-500
-          bg-slate-900
-          text-center
-          relative
-          transition-all duration-300
-          ${flash === "gain" ? "animate-gain" : ""}
-          ${flash === "loss" ? "animate-loss" : ""}
-        `}
+    <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center space-x-3">
+      <span
+        className="text-neonPink text-4xl transition-all duration-300"
         style={{
-          boxShadow: `
-            0 0 10px #06b6d4,
-            0 0 25px #06b6d4,
-            inset 0 0 15px rgba(6,182,212,0.4)
-          `
+          textShadow: `
+            0 0 5px #ff00ff,
+            0 0 10px #ff00ff,
+            0 0 20px #ff66ff
+          `,
+            animation: "flicker 2s infinite",
+          fontFamily: "'Neonderthaw', cursive",
         }}
       >
-        <p className="text-sm tracking-widest text-cyan-400 uppercase mb-2">
-          Balance
-        </p>
+        Balance:
+      </span>
+      <h2
+        className={`text-4xl font-bold text-neonPink transition-all duration-300 ${
+          flash === "gain" ? "animate-gain" : ""
+        } ${flash === "loss" ? "animate-loss" : ""}`}
+        style={{
+          textShadow: `
+            0 0 5px #ff00ff,
+            0 0 15px #ff00ff,
+            0 0 30px #ff66ff
+          `,
+            animation: "flicker 2s infinite",
+          fontFamily: "'Neonderthaw', cursive",
+        }}
+      >
+        {balance}
+      </h2>
 
-        <h2
-          className="text-5xl font-bold text-neonPink transition-all duration-300"
-          style={{
-            textShadow: `
-              0 0 5px #ff00ff,
-              0 0 15px #ff00ff,
-              0 0 30px #ff66ff
-            `
-          }}
-        >
-          {balance}
-        </h2>
-      </div>
+      <style>
+        {`
+          @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+            20%, 22%, 24%, 55% { opacity: 0.4; }
+          }
+
+          .animate-gain {
+            animation: gainFlash 0.5s ease-in-out;
+            color: #00ff7f !important;
+            text-shadow: 0 0 10px #00ff7f, 0 0 20px #00ff7f;
+          }
+
+          .animate-loss {
+            animation: lossFlash 0.5s ease-in-out;
+            color: #ff0033 !important;
+            text-shadow: 0 0 10px #ff0033, 0 0 20px #ff0033;
+            transform: translateX(-2px) rotate(-2deg);
+          }
+
+          @keyframes gainFlash {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+          }
+
+          @keyframes lossFlash {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.9) translateX(-2px) rotate(-2deg); }
+            100% { transform: scale(1); }
+          }
+        `}
+      </style>
     </div>
-    )
-
+  );
 }
