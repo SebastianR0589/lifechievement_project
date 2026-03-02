@@ -1,2 +1,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Neonderthaw&display=swap');
 @import "tailwindcss";
+
+@keyframes gainFlash {
+  0% {
+    box-shadow:
+      0 0 20px #00ff88,
+      0 0 40px #00ff88,
+      inset 0 0 25px rgba(0,255,136,0.6);
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes lossFlash {
+  0% {
+    box-shadow:
+      0 0 20px #ff0033,
+      0 0 40px #ff0033,
+      inset 0 0 25px rgba(255,0,51,0.6);
+    transform: translateX(-6px);
+  }
+  25% { transform: translateX(6px); }
+  50% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+  100% { transform: translateX(0); }
+}
+
+.animate-gain {
+  animation: gainFlash 0.5s ease-out;
+}
+
+.animate-loss {
+  animation: lossFlash 0.4s ease-out;
+}
