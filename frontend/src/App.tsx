@@ -1,10 +1,11 @@
-import { BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import { useState} from "react";
 import axios from "axios";
 import TasksPage from './pages/TasksPage';
 import RewardsPage from './pages/RewardsPage';
-import Header from './components/header/Header';
-import Balance from './components/balance/Balance';
+import Header from './components/layout/header/Header';
+import Balance from './components/ui/balance/Balance';
+import Navigation from './components/layout/navigation/Navigation';
 
 
 function App() {
@@ -21,20 +22,14 @@ function App() {
    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
     <Header />
     <Balance balance={balance} />  
-    <main className="flex-1 max-w-6xl mx-auto w-full px-6 py-10">
-      <div className="App">
-        <nav>
-          <ul>
-            <li><Link to="/tasks">Tasks</Link></li>
-            <li><Link to="/rewards">Rewards</Link></li>
-          </ul>
-        </nav>
-        <Routes>
-          <Route path="/tasks" element={<TasksPage onUpdate={updateBalance} />} />
-          <Route path="/rewards" element={<RewardsPage onUpdate={updateBalance}/>} />
-        </Routes>
-      </div>
-      </main>
+<main className="flex-1 max-w-6xl mx-auto w-full px-6 py-10">
+  <Navigation />
+
+  <Routes>
+    <Route path="/tasks" element={<TasksPage onUpdate={updateBalance} />} />
+    <Route path="/rewards" element={<RewardsPage onUpdate={updateBalance} />} />
+  </Routes>
+</main>
     </div>
   )
 }
