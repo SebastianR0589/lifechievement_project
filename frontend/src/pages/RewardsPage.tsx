@@ -6,6 +6,7 @@ import axios from "axios";
     description: string;
     cost: number;
     redeemed: boolean;
+    state: boolean;
   }
 
   type PageProps = {
@@ -32,6 +33,7 @@ export default function RewardsPage({ onUpdate }: PageProps) {
             description: description,
             cost: Number(cost),
             redeemed: false,
+            state: false,
         };
         axios.post("http://localhost:8080/api/rewards", newReward).then((response) => {
             console.log("POST RESPONSE:", response.data);

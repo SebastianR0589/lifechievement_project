@@ -6,6 +6,7 @@ import axios from "axios";
     description: string;
     points: number;
     status: boolean;
+    state: boolean;
   }
 
   type PageProps = {
@@ -33,6 +34,7 @@ export default function TasksPage({ onUpdate }: PageProps) {
       description: description,
       points: Number(points),
       status: false,
+      stae: false,
     };
     axios.post("http://localhost:8080/api/tasks", newTask).then((response) => {
       console.log("POST RESPONSE:", response.data);
