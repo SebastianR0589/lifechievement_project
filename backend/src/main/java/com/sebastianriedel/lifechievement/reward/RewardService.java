@@ -17,14 +17,26 @@ public class RewardService {
     @Autowired
     BalanceService balanceService;
 
-    public List<RewardResponseDTO> getAllRewards() {
-        List<Reward> rewards = rewardRepository.findAll();
+    public List<RewardResponseDTO> getAllActiveRewards() {
+        List<Reward> rewards = rewardRepository.findByStateFalse();
 
         return rewards.stream().map(reward -> new RewardResponseDTO(reward.getId(), reward.getDescription(), reward.getCost(), reward.isRedeemed(), reward.isState())).toList();
     }
 
-    public RewardResponseDTO getRewardById(Long id) {
-        Reward reward = rewardRepository.findById(id).orElseThrow(() -> new RewardNotFoundException(id));
+    public List<RewardResponseDTO> getAllArchivedRewards() {
+        List<Reward> rewards = rewardRepository.findByStateTrue();
+
+        return rewards.stream().map(reward -> new RewardResponseDTO(reward.getId(), reward.getDescription(), reward.getCost(), reward.isRedeemed(), reward.isState())).toList();
+    }
+
+    public RewardResponseDTO getActiveRewardById(Long id) {
+        Reward reward = rewardRepository.findByIdAndStateFalse(id).orElseThrow(() -> new RewardNotFoundException(id));
+
+        return new RewardResponseDTO(reward.getId(), reward.getDescription(), reward.getCost(), reward.isRedeemed(), reward.isState());
+    }
+
+    public RewardResponseDTO getArchivedRewardById(Long id) {
+        Reward reward = rewardRepository.findByIdAndStateTrue(id).orElseThrow(() -> new RewardNotFoundException(id));
 
         return new RewardResponseDTO(reward.getId(), reward.getDescription(), reward.getCost(), reward.isRedeemed(), reward.isState());
     }
@@ -68,8 +80,31 @@ public class RewardService {
         return rewardRepository.save(existingReward);
     }
 
+    public Reward archiveReward(Long id){
+        Reward reward = rewardRepository.findByIdAndStateTrue(id).orElseThrow(() -> new RewardNotFoundException(id));
 
-    public void deleteReward(Long id) {
+        reward.setState(true);
+        return rewardRepository.save(reward);
+    }
+
+    public Reward unarchiveReward(Long id){
+        Reward reward = rewardRepository.findByIdAndStateFalse(id).orElseThrow(() -> new RewardNotFoundException(id));
+
+        reward.setState(false);
+        return rewardRepository.save(reward);
+    }
+
+
+    public void deleteActiveReward(Long id) {
+        if (rewardRepository.existsById(id)) {
+            rewardRepository.deleteById(id);
+
+        } else {
+            System.out.println("Reward with" + id + " doesn't exist");
+        }
+    }
+
+    public void deleteArchivedReward(Long id) {
         if (rewardRepository.existsById(id)) {
             rewardRepository.deleteById(id);
 

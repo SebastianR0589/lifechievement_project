@@ -18,9 +18,9 @@ public class TaskService {
     @Autowired
     BalanceService balanceService;
 
-    public List<TaskResponseDTO> getAllTasks() {
+    public List<TaskResponseDTO> getAllActiveTasks() {
 
-        List<Task> tasks = taskRepository.findAll();
+        List<Task> tasks = taskRepository.findByStateFalse();
 
         return tasks.stream()
                 .map(task -> new TaskResponseDTO(
@@ -33,9 +33,38 @@ public class TaskService {
                 .toList();
     }
 
-    public TaskResponseDTO getTaskById(Long id) {
+    public List<TaskResponseDTO> getAllArchivedTasks() {
+        List<Task> tasks = taskRepository.findByStateTrue();
 
-        Task task = taskRepository.findById(id)
+        return tasks.stream()
+                .map(task -> new TaskResponseDTO(
+                        task.getId(),
+                        task.getDescription(),
+                        task.getPoints(),
+                        task.isStatus(),
+                        task.isState()
+                ))
+                .toList();
+    }
+
+
+    public TaskResponseDTO getActiveTaskById(Long id) {
+
+        Task task = taskRepository.findByIdAndStateFalse(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
+
+        return new TaskResponseDTO(
+                task.getId(),
+                task.getDescription(),
+                task.getPoints(),
+                task.isStatus(),
+                task.isState()
+        );
+    }
+
+    public TaskResponseDTO getArchivedTaskById(Long id) {
+
+        Task task = taskRepository.findByIdAndStateTrue(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
 
         return new TaskResponseDTO(
@@ -84,7 +113,31 @@ public class TaskService {
         return taskRepository.save(existingTask);
     }
 
-    public void deleteTask(Long id) {
+    public Task archiveTask(Long id) {
+        Task task = taskRepository.findByIdAndStateFalse(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
+
+        task.setState(true);
+        return taskRepository.save(task);
+    }
+
+    public Task unarchiveTask(Long id) {
+        Task task = taskRepository.findByIdAndStateTrue(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
+
+        task.setState(false);
+        return taskRepository.save(task);
+    }
+
+    public void deleteActiveTask(Long id) {
+        if (taskRepository.existsById(id)) {
+            taskRepository.deleteById(id);
+        } else {
+            System.out.println("Task with " + id + " doesn't exist.");
+        }
+    }
+
+    public void deleteArchivedTask(Long id) {
         if (taskRepository.existsById(id)) {
             taskRepository.deleteById(id);
         } else {

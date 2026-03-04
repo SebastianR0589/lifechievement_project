@@ -3,7 +3,9 @@ package com.sebastianriedel.lifechievement.reward;
 import com.sebastianriedel.lifechievement.reward.dto.RewardCreaetDTO;
 import com.sebastianriedel.lifechievement.reward.dto.RewardResponseDTO;
 import com.sebastianriedel.lifechievement.reward.dto.RewardUpdateDTO;
+import com.sebastianriedel.lifechievement.task.Task;
 import com.sebastianriedel.lifechievement.task.dto.TaskCreateDTO;
+import com.sebastianriedel.lifechievement.task.dto.TaskResponseDTO;
 import com.sebastianriedel.lifechievement.task.dto.TaskUpdateDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +20,23 @@ public class RewardController {
     RewardService rewardService;
 
     @GetMapping
-    public List<RewardResponseDTO> getReward() {
-        return rewardService.getAllRewards();
+    public List<RewardResponseDTO> getActiveReward() {
+        return rewardService.getAllActiveRewards();
+    }
+
+    @GetMapping("/archived")
+    public List<RewardResponseDTO> getArchivedReward() {
+        return rewardService.getAllArchivedRewards();
     }
 
     @GetMapping("{id}")
-    public RewardResponseDTO getRewardById(@PathVariable Long id) {
-        return rewardService.getRewardById(id);
+    public RewardResponseDTO getActiveRewardById(@PathVariable Long id) {
+        return rewardService.getActiveRewardById(id);
+    }
+
+    @GetMapping("/archived/{id}")
+    public RewardResponseDTO getArchivedRewardById(@PathVariable Long id) {
+        return rewardService.getArchivedRewardById(id);
     }
 
     @PostMapping
@@ -51,9 +63,38 @@ public class RewardController {
         );
     }
 
-    @DeleteMapping("{id}")
-    public void deleteReward(@PathVariable Long id) {
-        rewardService.deleteReward(id);
+    @PatchMapping("/{id}/archive")
+    public RewardResponseDTO archiveTask(@PathVariable Long id) {
+        Reward reward = rewardService.archiveReward(id);
+        return new RewardResponseDTO(
+                reward.getId(),
+                reward.getDescription(),
+                reward.getCost(),
+                reward.isRedeemed(),
+                reward.isState()
+        );
     }
 
+    @PatchMapping("/{id}/unarchive")
+    public RewardResponseDTO unarchiveTask(@PathVariable Long id) {
+        Reward reward = rewardService.unarchiveReward(id);
+        return new RewardResponseDTO(
+                reward.getId(),
+                reward.getDescription(),
+                reward.getCost(),
+                reward.isRedeemed(),
+                reward.isState()
+        );
+    }
+
+
+    @DeleteMapping("{id}")
+    public void deleteActiveReward(@PathVariable Long id) {
+        rewardService.deleteActiveReward(id);
+    }
+
+    @DeleteMapping("/archived/{id}")
+    public void deleteArchivedReward(@PathVariable Long id) {
+        rewardService.deleteArchivedReward(id);
+    }
 }
