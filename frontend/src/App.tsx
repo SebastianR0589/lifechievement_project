@@ -5,6 +5,8 @@ import TasksPage from './pages/TasksPage';
 import RewardsPage from './pages/RewardsPage';
 import Header from './components/layout/header/Header';
 import Navigation from './components/layout/navigation/Navigation';
+import RewardsArchivePage from './pages/RewardsArchivePage';
+import TasksArchivePage from './pages/TasksArchivePage';
 
 function App() {
   const [balance, setBalance] = useState(0);
@@ -28,7 +30,9 @@ function App() {
 
         <Routes>
           <Route path="/tasks" element={<TasksPage onUpdate={updateBalance} />} />
+          <Route path="/tasks/archive" element={<TasksArchivePage />} />
           <Route path="/rewards" element={<RewardsPage onUpdate={updateBalance} />} />
+          <Route path="/rewards/archive" element={<RewardsArchivePage />} />
         </Routes>
       </main>
     </div>
