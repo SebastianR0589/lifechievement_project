@@ -12,6 +12,7 @@ public class TaskCreateDTO {
     @Max(value = 1000, message = "Points need to be under 1000")
     private int points;
     private boolean status;
+    private boolean state;
 
     // Getter + Setter
 
@@ -38,4 +39,8 @@ public class TaskCreateDTO {
     public void setStatus(boolean status) {
         this.status = status;
     }
+
+    public boolean isState() {return state;}
+
+    public void setState(boolean state) {this.state = state;}
 }

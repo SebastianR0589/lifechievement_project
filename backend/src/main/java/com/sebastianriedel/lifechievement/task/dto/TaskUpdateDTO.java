@@ -12,6 +12,7 @@ public class TaskUpdateDTO {
     @Max(1000)
     private int points;
     private boolean status;
+    private boolean state;
 
     // Getter + Setter
 
@@ -38,4 +39,14 @@ public class TaskUpdateDTO {
     public void setStatus(boolean status) {
         this.status = status;
     }
+
+    public boolean isState() {
+        return state;
+    }
+
+    public void setState(boolean state) {
+        this.state = state;
+    }
 }
+
+

@@ -34,7 +34,8 @@ public class TaskController {
                 task.getId(),
                 task.getDescription(),
                 task.getPoints(),
-                task.isStatus()
+                task.isStatus(),
+                task.isState()
         );
     }
 
@@ -44,7 +45,8 @@ public class TaskController {
        return new TaskResponseDTO(    task.getId(),
                task.getDescription(),
                task.getPoints(),
-               task.isStatus()
+               task.isStatus(),
+               task.isState()
        );
     }
 

@@ -10,6 +10,7 @@ public class RewardUpdateDTO {
     @Min(1)
     private int cost;
     private boolean redeemed;
+    private boolean state;
 
     //Getter & Setter
     public String getDescription() {
@@ -35,5 +36,9 @@ public class RewardUpdateDTO {
     public void setRedeemed(boolean redeemed) {
         this.redeemed = redeemed;
     }
+
+    public boolean isState() {return state;}
+
+    public void setState(boolean state) {this.state = state;}
 
 }

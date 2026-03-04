@@ -27,7 +27,8 @@ public class TaskService {
                         task.getId(),
                         task.getDescription(),
                         task.getPoints(),
-                        task.isStatus()
+                        task.isStatus(),
+                        task.isState()
                 ))
                 .toList();
     }
@@ -41,7 +42,8 @@ public class TaskService {
                 task.getId(),
                 task.getDescription(),
                 task.getPoints(),
-                task.isStatus()
+                task.isStatus(),
+                task.isState()
         );
     }
 
@@ -52,6 +54,7 @@ public class TaskService {
         task.setDescription(dto.getDescription());
         task.setPoints(dto.getPoints());
         task.setStatus(dto.isStatus());
+        task.setState(dto.isState());
 
         return taskRepository.save(task);
     }
@@ -71,9 +74,11 @@ public class TaskService {
 
         if (!oldStatus && newStatus) {
             balanceService.updateBalance(existingTask.getPoints());
+            existingTask.setState(true);
         }
         if (oldStatus && !newStatus) {
             balanceService.updateBalance(-existingTask.getPoints());
+            existingTask.setState(false);
         }
 
         return taskRepository.save(existingTask);

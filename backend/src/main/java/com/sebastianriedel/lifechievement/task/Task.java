@@ -12,16 +12,18 @@ public class Task {
     private String description;
     private int points;
     private boolean status;
+    private boolean state;
 
 
     //Constructor
     public Task() {
     }
 
-    public Task(String description, int points, boolean status) {
+    public Task(String description, int points, boolean status, boolean state) {
         this.description = description;
         this.points = points;
         this.status = status;
+        this.state = state;
     }
 
 
@@ -53,5 +55,9 @@ public class Task {
     public void setStatus(boolean status) {
         this.status = status;
     }
+
+    public boolean isState() {return state;}
+
+    public void setState(boolean state) {this.state = state;}
 
 }

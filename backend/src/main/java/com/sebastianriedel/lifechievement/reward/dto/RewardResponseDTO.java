@@ -6,13 +6,15 @@ public class RewardResponseDTO {
     private String description;
     private int cost;
     private boolean redeemed;
+    private boolean state;
 
     //Constructor
-    public RewardResponseDTO(Long id, String description, int cost, boolean redeemed) {
+    public RewardResponseDTO(Long id, String description, int cost, boolean redeemed, boolean state) {
         this.id = id;
         this.description = description;
         this.cost = cost;
         this.redeemed = redeemed;
+        this.state = state;
     }
 
     //Getter
@@ -31,6 +33,8 @@ public class RewardResponseDTO {
     public boolean isRedeemed() {
         return redeemed;
     }
+
+    public boolean isState() {return state;}
 
 
 }

@@ -6,12 +6,14 @@ public class TaskResponseDTO {
     private String description;
     private int points;
     private boolean status;
+    private boolean state;
 
-    public TaskResponseDTO(Long id, String description, int points, boolean status) {
+    public TaskResponseDTO(Long id, String description, int points, boolean status, boolean state) {
         this.id = id;
         this.description = description;
         this.points = points;
         this.status = status;
+        this.state = state;
     }
 
     // Getter
@@ -30,4 +32,6 @@ public class TaskResponseDTO {
     public boolean isStatus() {
         return status;
     }
+
+    public boolean isState() {return state;}
 }

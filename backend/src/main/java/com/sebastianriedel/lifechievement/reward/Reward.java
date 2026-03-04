@@ -12,15 +12,17 @@ public class Reward {
     private String description;
     private int cost;
     private boolean redeemed;
+    private boolean state;
 
     //Constructor
     public Reward() {
     }
 
-    public Reward(String description, int cost, boolean redeemed) {
+    public Reward(String description, int cost, boolean redeemed, boolean state) {
         this.description = description;
         this.cost = cost;
         this.redeemed = redeemed;
+        this.state = state;
     }
 
     //Getter 6 Setter
@@ -53,5 +55,9 @@ public class Reward {
     public void setRedeemed(boolean redeemed) {
         this.redeemed = redeemed;
     }
+
+    public boolean isState() {return state;}
+
+    public void setState(boolean state) {this.state = state;}
 
 }

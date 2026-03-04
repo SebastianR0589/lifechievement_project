@@ -20,13 +20,13 @@ public class RewardService {
     public List<RewardResponseDTO> getAllRewards() {
         List<Reward> rewards = rewardRepository.findAll();
 
-        return rewards.stream().map(reward -> new RewardResponseDTO(reward.getId(), reward.getDescription(), reward.getCost(), reward.isRedeemed())).toList();
+        return rewards.stream().map(reward -> new RewardResponseDTO(reward.getId(), reward.getDescription(), reward.getCost(), reward.isRedeemed(), reward.isState())).toList();
     }
 
     public RewardResponseDTO getRewardById(Long id) {
         Reward reward = rewardRepository.findById(id).orElseThrow(() -> new RewardNotFoundException(id));
 
-        return new RewardResponseDTO(reward.getId(), reward.getDescription(), reward.getCost(), reward.isRedeemed());
+        return new RewardResponseDTO(reward.getId(), reward.getDescription(), reward.getCost(), reward.isRedeemed(), reward.isState());
     }
 
     public Reward createReward(RewardCreaetDTO dto) {
@@ -34,6 +34,7 @@ public class RewardService {
         reward.setDescription(dto.getDescription());
         reward.setCost(dto.getCost());
         reward.setRedeemed(dto.isRedeemed());
+        reward.setState(dto.isState());
 
         return rewardRepository.save(reward);
     }
@@ -56,10 +57,12 @@ public class RewardService {
             }
 
             balanceService.updateBalance(-existingReward.getCost());
+            existingReward.setState(true);
         }
 
         if (oldStatus && !newStatus) {
             balanceService.updateBalance(existingReward.getCost());
+            existingReward.setState(false);
         }
 
         return rewardRepository.save(existingReward);

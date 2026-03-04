@@ -34,7 +34,8 @@ public class RewardController {
                 reward.getId(),
                 reward.getDescription(),
                 reward.getCost(),
-                reward.isRedeemed()
+                reward.isRedeemed(),
+                reward.isState()
         );
     }
 
@@ -45,7 +46,8 @@ public class RewardController {
                 reward.getId(),
                 reward.getDescription(),
                 reward.getCost(),
-                reward.isRedeemed()
+                reward.isRedeemed(),
+                reward.isState()
         );
     }
 
