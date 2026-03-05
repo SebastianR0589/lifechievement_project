@@ -7,6 +7,7 @@ export default function Navigation() {
         <li>
           <NavLink
             to="/tasks"
+            end
             className={({ isActive }) =>
               `
               px-8 py-3
@@ -51,6 +52,7 @@ export default function Navigation() {
         <li>
           <NavLink
             to="/rewards"
+            end
             className={({ isActive }) =>
               `
               px-8 py-3
