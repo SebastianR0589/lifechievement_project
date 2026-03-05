@@ -126,6 +126,7 @@ public class TaskService {
                 .orElseThrow(() -> new TaskNotFoundException(id));
 
         task.setState(false);
+        task.setStatus(false);
         return taskRepository.save(task);
     }
 

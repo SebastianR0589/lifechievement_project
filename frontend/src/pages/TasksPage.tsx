@@ -45,13 +45,47 @@ export default function TasksPage({ onUpdate }: PageProps) {
     });
   };
 
+  // const handleStatusToggle = (task: Task) => {
+  //   const updatedTask = { ...task, status: !task.status };
+  //   axios.put(`http://localhost:8080/api/tasks/${task.id}`, updatedTask).then((response) => {
+  //     setTasks(tasks.map((t) => (t.id === task.id ? response.data : t)));
+  //       onUpdate();
+  //   });
+  // };
+
+  //   const handleStatusToggle = (task: Task) => {
+  //   const updatedTask = { ...task, status: !task.status };
+  //   axios.put(`http://localhost:8080/api/tasks/${task.id}`, updatedTask).then((response) => {
+  //     if (response.data.state) {
+  //       setTasks(tasks.filter((t) => t.id !== task.id));
+  //     } else {    
+  //     setTasks(tasks.map((t) => (t.id === task.id ? response.data : t)));
+  //       onUpdate();
+  //     }
+  //   });
+  // };
+
   const handleStatusToggle = (task: Task) => {
-    const updatedTask = { ...task, status: !task.status };
-    axios.put(`http://localhost:8080/api/tasks/${task.id}`, updatedTask).then((response) => {
-      setTasks(tasks.map((t) => (t.id === task.id ? response.data : t)));
-        onUpdate();
+  const updatedTask = { ...task, status: !task.status };
+
+  axios
+    .put(`http://localhost:8080/api/tasks/${task.id}`, updatedTask)
+    .then((response) => {
+      const updated = response.data;
+
+      setTasks((prevTasks) => {
+        if (updated.state) {
+          // Task wurde archiviert → aus aktueller Liste entfernen
+          return prevTasks.filter((t) => t.id !== task.id);
+        }
+
+        // Task wurde nur aktualisiert → ersetzen
+        return prevTasks.map((t) => (t.id === task.id ? updated : t));
+      });
+
+      onUpdate();
     });
-  };
+};
 
  const handleDelete = (taskId: number) => {
     axios.delete(`http://localhost:8080/api/tasks/${taskId}`).then(() => {

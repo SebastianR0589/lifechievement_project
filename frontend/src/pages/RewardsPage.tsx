@@ -49,7 +49,13 @@ export default function RewardsPage({ onUpdate }: PageProps) {
       const handleRedeemToggle = (reward: Reward) => {
         const updatedReward = { ...reward, redeemed: !reward.redeemed };
         axios.put(`http://localhost:8080/api/rewards/${reward.id}`, updatedReward).then((response) => {
-          setRewards(rewards.map((r) => (r.id === reward.id ? response.data : r)));
+          const updated = response.data;
+          setRewards((prevRewards) => {if (updated.state) {
+              return prevRewards.filter((r) => r.id !== reward.id);
+            }
+             return prevRewards.map((r) => (r.id === reward.id ? updated : r));
+          });
+            
             onUpdate();
         });
       };

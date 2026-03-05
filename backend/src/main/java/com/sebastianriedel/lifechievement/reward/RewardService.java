@@ -81,16 +81,17 @@ public class RewardService {
     }
 
     public Reward archiveReward(Long id){
-        Reward reward = rewardRepository.findByIdAndStateTrue(id).orElseThrow(() -> new RewardNotFoundException(id));
+        Reward reward = rewardRepository.findByIdAndStateFalse(id).orElseThrow(() -> new RewardNotFoundException(id));
 
         reward.setState(true);
         return rewardRepository.save(reward);
     }
 
     public Reward unarchiveReward(Long id){
-        Reward reward = rewardRepository.findByIdAndStateFalse(id).orElseThrow(() -> new RewardNotFoundException(id));
+        Reward reward = rewardRepository.findByIdAndStateTrue(id).orElseThrow(() -> new RewardNotFoundException(id));
 
         reward.setState(false);
+        reward.setRedeemed(false);
         return rewardRepository.save(reward);
     }
 
