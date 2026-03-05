@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 interface ArchivedReward {
   id: number;
   description: string;
-  points: number;
-  status: boolean;
+  cost: number;
+  redeemed: boolean;
   state: boolean;
 }
 
@@ -58,21 +58,49 @@ return (
           
     
             <div className="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4">
-              <div>
-                <p className="text-white font-semibold text-lg">{archivedReward.description}</p>
-                <p className="text-cyan-400">{archivedReward.points} pts</p>
-                <p className={archivedReward.status ? "text-green-400 font-bold" : "text-red-400 font-bold"}>
-                  {archivedReward.status ? "Redeemed" : "Not redeemed"}
-                </p>
-              </div>
+                 <div>
+             <p className="text-slate-100 font-semibold text-lg tracking-wide">
+                    {archivedReward.description}
+                  </p>
+                <p className="text-cyan-400 font-mono tracking-widest">{archivedReward.cost} pts</p>
+                  <p
+                 className={`font-bold uppercase tracking-wider ${
+                      archivedReward.redeemed
+                        ? "text-green-400 drop-shadow-[0_0_6px_#22c55e]"
+                        : "text-red-400 drop-shadow-[0_0_6px_#ef4444]"
+                    }`}
+                  >
+                    {archivedReward.redeemed ? "Redeemed" : "Not redeemed"}
+                  </p>
+                </div>
               <div className="flex gap-2 mt-2 md:mt-0">              
                 <button onClick={() => handleStateToggle(archivedReward)}
-                        className="px-3 py-1 bg-green-500 rounded-lg font-bold text-slate-900 hover:bg-green-400 transition-all">
-                  Toggle
+                                         className="
+    px-4 py-1
+    border border-cyan-400
+    text-cyan-300
+    rounded-lg
+    uppercase text-xs tracking-widest
+    transition-all duration-300
+    hover:shadow-[0_0_12px_#22d3ee]
+    hover:text-cyan-200
+  "
+                  >
+                 Unarchive
                 </button>
                 <button onClick={() => handleDelete(archivedReward.id)}
-                        className="px-3 py-1 bg-red-500 rounded-lg font-bold text-slate-900 hover:bg-red-400 transition-all">
-                  Delete
+                                         className="
+    px-4 py-1
+    border border-pink-500
+    text-pink-400
+    rounded-lg
+    uppercase text-xs tracking-widest
+    transition-all duration-300
+    hover:shadow-[0_0_12px_#ff00ff]
+    hover:text-pink-300
+  "
+                  >
+                  Delete Reward
                 </button>
               </div>
             </div>

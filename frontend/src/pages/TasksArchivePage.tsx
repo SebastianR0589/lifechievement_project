@@ -58,21 +58,53 @@ return (
           
     
             <div className="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4">
-              <div>
-                <p className="text-white font-semibold text-lg">{archivedTask.description}</p>
-                <p className="text-cyan-400">{archivedTask.points} pts</p>
-                <p className={archivedTask.status ? "text-green-400 font-bold" : "text-red-400 font-bold"}>
-                  {archivedTask.status ? "Completed" : "Not completed"}
-                </p>
-              </div>
+                 <div>
+                  <p className="text-slate-100 font-semibold text-lg tracking-wide">
+                    {archivedTask.description}
+                  </p>
+
+                  <p className="text-cyan-400 font-mono tracking-widest">
+                    {archivedTask.points} PTS
+                  </p>
+
+                  <p
+                    className={`font-bold uppercase tracking-wider ${
+                      archivedTask.status
+                        ? "text-green-400 drop-shadow-[0_0_6px_#22c55e]"
+                        : "text-red-400 drop-shadow-[0_0_6px_#ef4444]"
+                    }`}
+                  >
+                    {archivedTask.status ? "Completed" : "Not Completed"}
+                  </p>
+                </div>
               <div className="flex gap-2 mt-2 md:mt-0">              
                 <button onClick={() => handleStateToggle(archivedTask)}
-                        className="px-3 py-1 bg-green-500 rounded-lg font-bold text-slate-900 hover:bg-green-400 transition-all">
-                  Toggle
+                    className="
+    px-4 py-1
+    border border-cyan-400
+    text-cyan-300
+    rounded-lg
+    uppercase text-xs tracking-widest
+    transition-all duration-300
+    hover:shadow-[0_0_12px_#22d3ee]
+    hover:text-cyan-200
+  "
+                  >
+                 Unarchive
                 </button>
                 <button onClick={() => handleDelete(archivedTask.id)}
-                        className="px-3 py-1 bg-red-500 rounded-lg font-bold text-slate-900 hover:bg-red-400 transition-all">
-                  Delete
+                                          className="
+    px-4 py-1
+    border border-pink-500
+    text-pink-400
+    rounded-lg
+    uppercase text-xs tracking-widest
+    transition-all duration-300
+    hover:shadow-[0_0_12px_#ff00ff]
+    hover:text-pink-300
+  "
+                  >
+                  Delete Task
                 </button>
               </div>
             </div>
