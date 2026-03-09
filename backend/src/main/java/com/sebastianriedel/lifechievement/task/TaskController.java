@@ -45,8 +45,10 @@ public class TaskController {
                 task.getId(),
                 task.getDescription(),
                 task.getPoints(),
+                task.getDone(),
                 task.isStatus(),
-                task.isState()
+                task.isState(),
+                task.isRepeatable()
         );
     }
 
@@ -56,8 +58,10 @@ public class TaskController {
         return new TaskResponseDTO(task.getId(),
                 task.getDescription(),
                 task.getPoints(),
+                task.getDone(),
                 task.isStatus(),
-                task.isState()
+                task.isState(),
+                task.isRepeatable()
         );
     }
 
@@ -68,8 +72,10 @@ public class TaskController {
                 task.getId(),
                 task.getDescription(),
                 task.getPoints(),
+                task.getDone(),
                 task.isStatus(),
-                task.isState()
+                task.isState(),
+                task.isRepeatable()
         );
     }
 
@@ -80,8 +86,10 @@ public class TaskController {
                 task.getId(),
                 task.getDescription(),
                 task.getPoints(),
+                task.getDone(),
                 task.isStatus(),
-                task.isState()
+                task.isState(),
+                task.isRepeatable()
         );
     }
 

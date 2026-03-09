@@ -27,8 +27,10 @@ public class TaskService {
                         task.getId(),
                         task.getDescription(),
                         task.getPoints(),
+                        task.getDone(),
                         task.isStatus(),
-                        task.isState()
+                        task.isState(),
+                        task.isRepeatable()
                 ))
                 .toList();
     }
@@ -41,8 +43,10 @@ public class TaskService {
                         task.getId(),
                         task.getDescription(),
                         task.getPoints(),
+                        task.getDone(),
                         task.isStatus(),
-                        task.isState()
+                        task.isState(),
+                        task.isRepeatable()
                 ))
                 .toList();
     }
@@ -57,8 +61,10 @@ public class TaskService {
                 task.getId(),
                 task.getDescription(),
                 task.getPoints(),
+                task.getDone(),
                 task.isStatus(),
-                task.isState()
+                task.isState(),
+                task.isRepeatable()
         );
     }
 
@@ -71,8 +77,10 @@ public class TaskService {
                 task.getId(),
                 task.getDescription(),
                 task.getPoints(),
+                task.getDone(),
                 task.isStatus(),
-                task.isState()
+                task.isState(),
+                task.isRepeatable()
         );
     }
 
@@ -84,6 +92,7 @@ public class TaskService {
         task.setPoints(dto.getPoints());
         task.setStatus(dto.isStatus());
         task.setState(dto.isState());
+        task.setRepeatable(dto.isRepeatable());
 
         return taskRepository.save(task);
     }
@@ -98,12 +107,18 @@ public class TaskService {
         existingTask.setDescription(dto.getDescription());
         existingTask.setPoints(dto.getPoints());
         existingTask.setStatus(dto.isStatus());
+        existingTask.setRepeatable(dto.isRepeatable());
 
         boolean newStatus = dto.isStatus();
 
         if (!oldStatus && newStatus) {
             balanceService.updateBalance(existingTask.getPoints());
-            existingTask.setState(true);
+            if (existingTask.isRepeatable()) {
+                existingTask.setDone(existingTask.getDone() + 1);
+                existingTask.setStatus(false);
+            } else {
+                existingTask.setState(true);
+            }
         }
         if (oldStatus && !newStatus) {
             balanceService.updateBalance(-existingTask.getPoints());
@@ -127,6 +142,7 @@ public class TaskService {
 
         task.setState(false);
         task.setStatus(false);
+        task.setDone(0);
         return taskRepository.save(task);
     }
 

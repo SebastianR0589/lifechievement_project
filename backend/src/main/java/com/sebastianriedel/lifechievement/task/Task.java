@@ -11,19 +11,25 @@ public class Task {
     private Long id;
     private String description;
     private int points;
+    private int done;
+    //status false = not done; status true = done
     private boolean status;
+    //state false = active; state true = archive
     private boolean state;
+    private boolean repeatable;
 
 
     //Constructor
     public Task() {
     }
 
-    public Task(String description, int points, boolean status, boolean state) {
+    public Task(String description, int points, int done, boolean status, boolean state, boolean repeatable) {
         this.description = description;
         this.points = points;
+        this.done = done;
         this.status = status;
         this.state = state;
+        this.repeatable = repeatable;
     }
 
 
@@ -48,6 +54,14 @@ public class Task {
         this.points = points;
     }
 
+    public int getDone() {
+        return done;
+    }
+
+    public void setDone(int done) {
+        this.done = done;
+    }
+
     public boolean isStatus() {
         return status;
     }
@@ -56,8 +70,20 @@ public class Task {
         this.status = status;
     }
 
-    public boolean isState() {return state;}
+    public boolean isState() {
+        return state;
+    }
 
-    public void setState(boolean state) {this.state = state;}
+    public void setState(boolean state) {
+        this.state = state;
+    }
+
+    public boolean isRepeatable() {
+        return repeatable;
+    }
+
+    public void setRepeatable(boolean repeatable) {
+        this.repeatable = repeatable;
+    }
 
 }
