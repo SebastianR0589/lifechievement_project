@@ -5,8 +5,10 @@ interface ArchivedTask {
   id: number;
   description: string;
   points: number;
+  done: number
   status: boolean;
   state: boolean;
+  repeatable: boolean;
 }
 
 export default function TasksArchivePage() {
@@ -66,6 +68,9 @@ return (
                   <p className="text-cyan-400 font-mono tracking-widest">
                     {archivedTask.points} PTS
                   </p>
+                     {archivedTask.done > 0 && (
+  <p>Done: {archivedTask.done}x</p>
+)}
 
                   <p
                     className={`font-bold uppercase tracking-wider ${

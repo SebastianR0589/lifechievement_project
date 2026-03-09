@@ -253,7 +253,7 @@ export default function TasksPage({ onUpdate }: PageProps) {
   />
 </p>
            {task.repeatable && (
-  <p>Done: {task.done}</p>
+  <p>Done: {task.done}x</p>
 )}
                   <p
                     className={`font-bold uppercase tracking-wider ${
