@@ -5,8 +5,10 @@ interface Task {
   id: number;
   description: string;
   points: number;
+  done: number;
   status: boolean;
   state: boolean;
+  repeatable: boolean;
 }
 
 type PageProps = {
@@ -17,7 +19,10 @@ export default function TasksPage({ onUpdate }: PageProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [description, setDescription] = useState("");
   const [points, setPoints] = useState(0);
+  const [done, setDone] = useState(0);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [repeatable, setRepeatable] = useState(false);
+
 
   useEffect(() => {
     axios.get("http://localhost:8080/api/tasks").then((response) => {
@@ -31,8 +36,10 @@ export default function TasksPage({ onUpdate }: PageProps) {
     const newTask = {
       description: description,
       points: Number(points),
+      done: Number(done),
       status: false,
-      stae: false,
+      state: false,
+      repeatable: repeatable,
     };
     axios.post("http://localhost:8080/api/tasks", newTask).then((response) => {
       console.log("POST RESPONSE:", response.data);
@@ -40,6 +47,7 @@ export default function TasksPage({ onUpdate }: PageProps) {
 
       setDescription("");
       setPoints(0);
+      setRepeatable(false);
     });
   };
 
@@ -60,6 +68,25 @@ export default function TasksPage({ onUpdate }: PageProps) {
         onUpdate();
       });
   };
+
+  const handleRepeatableToggle = (task: Task) => {
+
+  const updatedTask = {
+    ...task,
+    repeatable: !task.repeatable
+  };
+
+  axios.put(`http://localhost:8080/api/tasks/${task.id}`, updatedTask)
+    .then((response) => {
+
+      const updated = response.data;
+
+      setTasks(prev =>
+        prev.map(t => t.id === task.id ? updated : t)
+      );
+
+    });
+};
 
   const handleDelete = (taskId: number) => {
     axios.delete(`http://localhost:8080/api/tasks/${taskId}`).then(() => {
@@ -132,6 +159,18 @@ export default function TasksPage({ onUpdate }: PageProps) {
             className="w-full px-4 py-2 rounded-lg bg-slate-800 text-white border border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-400"
           />
         </div>
+        <div className="mb-4 flex items-center gap-2">
+          <input
+            type="checkbox"
+            name="repeatable"
+            checked={repeatable}
+            onChange={(e) => setRepeatable(e.target.checked)}
+            className="form-checkbox h-5 w-5 text-cyan-500 focus:ring-cyan-400 border-cyan-500"
+          />
+          <label className="block text-cyan-400 uppercase tracking-widest mb-1">
+            Repeatable:
+          </label>
+        </div>
         <button
           type="submit"
           className="px-6 py-2 rounded-xl bg-neonPink text-slate-900 font-bold hover:bg-pink-600 transition-all"
@@ -176,6 +215,17 @@ export default function TasksPage({ onUpdate }: PageProps) {
                   }
                   className="w-24 px-3 py-2 rounded-lg bg-slate-800 border border-cyan-500 text-white"
                 />
+                <input
+                  type="checkbox"
+                  checked={editingTask.repeatable}
+                  onChange={(e) =>
+                    setEditingTask({
+                      ...editingTask,
+                      repeatable: e.target.checked,
+                    })
+                  }
+                  className="form-checkbox h-5 w-5 text-cyan-500 focus:ring-cyan-400 border-cyan-500"
+                />
                 <button
                   onClick={handleSave}
                   className="px-4 py-2 rounded-lg bg-neonPink text-slate-900 font-bold hover:bg-pink-600 transition-all"
@@ -193,7 +243,18 @@ export default function TasksPage({ onUpdate }: PageProps) {
                   <p className="text-cyan-400 font-mono tracking-widest">
                     +{task.points} PTS
                   </p>
-
+             <p>
+  Repeatable:
+  <input
+    type="checkbox"
+    checked={task.repeatable}
+    onChange={() => handleRepeatableToggle(task)}
+    className="ml-2"
+  />
+</p>
+           {task.repeatable && (
+  <p>Done: {task.done}</p>
+)}
                   <p
                     className={`font-bold uppercase tracking-wider ${
                       task.status
