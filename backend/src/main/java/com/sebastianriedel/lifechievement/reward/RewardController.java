@@ -46,8 +46,10 @@ public class RewardController {
                 reward.getId(),
                 reward.getDescription(),
                 reward.getCost(),
+                reward.getGotten(),
                 reward.isRedeemed(),
-                reward.isState()
+                reward.isState(),
+                reward.isRepeatable()
         );
     }
 
@@ -58,8 +60,10 @@ public class RewardController {
                 reward.getId(),
                 reward.getDescription(),
                 reward.getCost(),
+                reward.getGotten(),
                 reward.isRedeemed(),
-                reward.isState()
+                reward.isState(),
+                reward.isRepeatable()
         );
     }
 
@@ -70,8 +74,10 @@ public class RewardController {
                 reward.getId(),
                 reward.getDescription(),
                 reward.getCost(),
+                reward.getGotten(),
                 reward.isRedeemed(),
-                reward.isState()
+                reward.isState(),
+                reward.isRepeatable()
         );
     }
 
@@ -82,8 +88,10 @@ public class RewardController {
                 reward.getId(),
                 reward.getDescription(),
                 reward.getCost(),
+                reward.getGotten(),
                 reward.isRedeemed(),
-                reward.isState()
+                reward.isState(),
+                reward.isRepeatable()
         );
     }
 

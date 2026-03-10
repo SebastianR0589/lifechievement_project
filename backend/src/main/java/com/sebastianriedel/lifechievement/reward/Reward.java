@@ -11,18 +11,24 @@ public class Reward {
     private Long id;
     private String description;
     private int cost;
+    private int gotten;
+    //status false = not redeemed; status true = redeemed
     private boolean redeemed;
+    //state false = active; state true = archive
     private boolean state;
+    private boolean repeatable;
 
     //Constructor
     public Reward() {
     }
 
-    public Reward(String description, int cost, boolean redeemed, boolean state) {
+    public Reward(String description, int cost, int gotten, boolean redeemed, boolean state, boolean repeatable) {
         this.description = description;
         this.cost = cost;
+        this.gotten = gotten;
         this.redeemed = redeemed;
         this.state = state;
+        this.repeatable = repeatable;
     }
 
     //Getter 6 Setter
@@ -48,6 +54,14 @@ public class Reward {
         this.cost = cost;
     }
 
+    public int getGotten() {
+        return gotten;
+    }
+
+    public void setGotten(int gotten) {
+        this.gotten = gotten;
+    }
+
     public boolean isRedeemed() {
         return redeemed;
     }
@@ -56,8 +70,20 @@ public class Reward {
         this.redeemed = redeemed;
     }
 
-    public boolean isState() {return state;}
+    public boolean isState() {
+        return state;
+    }
 
-    public void setState(boolean state) {this.state = state;}
+    public void setState(boolean state) {
+        this.state = state;
+    }
+
+    public boolean isRepeatable() {
+        return repeatable;
+    }
+
+    public void setRepeatable(boolean repeatable) {
+        this.repeatable = repeatable;
+    }
 
 }
