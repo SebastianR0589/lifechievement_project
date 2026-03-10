@@ -5,8 +5,10 @@ interface Reward {
   id: number;
   description: string;
   cost: number;
+  gotten: number;
   redeemed: boolean;
   state: boolean;
+  repeatable: boolean;
 }
 
 type PageProps = {
@@ -17,7 +19,9 @@ export default function RewardsPage({ onUpdate }: PageProps) {
   const [rewards, setRewards] = useState<Reward[]>([]);
   const [description, setDescription] = useState("");
   const [cost, setCost] = useState(0);
+  const [gotten] = useState(0);
   const [editingReward, setEditingReward] = useState<Reward | null>(null);
+  const [repeatable, setRepeatable] = useState(false);
 
   useEffect(() => {
     axios.get("http://localhost:8080/api/rewards").then((response) => {
@@ -31,8 +35,10 @@ export default function RewardsPage({ onUpdate }: PageProps) {
     const newReward = {
       description: description,
       cost: Number(cost),
+      gotten: Number(gotten),
       redeemed: false,
       state: false,
+      repeatable: repeatable,
     };
     axios
       .post("http://localhost:8080/api/rewards", newReward)
@@ -42,6 +48,7 @@ export default function RewardsPage({ onUpdate }: PageProps) {
 
         setDescription("");
         setCost(0);
+        setRepeatable(false);
       });
   };
 
@@ -61,6 +68,25 @@ export default function RewardsPage({ onUpdate }: PageProps) {
         onUpdate();
       });
   };
+
+  const handleRepeatableToggle = (reward: Reward) => {
+
+  const updatedReward = {
+    ...reward,
+    repeatable: !reward.repeatable
+  };
+
+  axios.put(`http://localhost:8080/api/rewards/${reward.id}`, updatedReward)
+    .then((response) => {
+
+      const updated = response.data;
+
+      setRewards(prev =>
+        prev.map(r => r.id === reward.id ? updated : r)
+      );
+
+    });
+};
 
   const handleDelete = (rewardId: number) => {
     axios.delete(`http://localhost:8080/api/rewards/${rewardId}`).then(() => {
@@ -129,6 +155,18 @@ export default function RewardsPage({ onUpdate }: PageProps) {
             className="w-full px-4 py-2 rounded-lg bg-slate-800 text-white border border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-400"
           />
         </div>
+             <div className="mb-4 flex items-center gap-2">
+          <input
+            type="checkbox"
+            name="repeatable"
+            checked={repeatable}
+            onChange={(e) => setRepeatable(e.target.checked)}
+            className="form-checkbox h-5 w-5 text-cyan-500 focus:ring-cyan-400 border-cyan-500"
+          />
+          <label className="block text-cyan-400 uppercase tracking-widest mb-1">
+            Repeatable:
+          </label>
+        </div>
         <button
           type="submit"
           className="px-6 py-2 rounded-xl bg-neonPink text-slate-900 font-bold hover:bg-pink-600 transition-all"
@@ -173,6 +211,17 @@ export default function RewardsPage({ onUpdate }: PageProps) {
                   }
                   className="w-24 px-3 py-2 rounded-lg bg-slate-800 border border-cyan-500 text-white"
                 />
+                 <input
+                  type="checkbox"
+                  checked={editingReward.repeatable}
+                  onChange={(e) =>
+                    setEditingReward({
+                      ...editingReward,
+                      repeatable: e.target.checked,
+                    })
+                  }
+                  className="form-checkbox h-5 w-5 text-cyan-500 focus:ring-cyan-400 border-cyan-500"
+                />
                 <button
                   onClick={handleSave}
                   className="px-4 py-2 rounded-lg bg-neonPink text-slate-900 font-bold hover:bg-pink-600 transition-all"
@@ -187,6 +236,18 @@ export default function RewardsPage({ onUpdate }: PageProps) {
                     {reward.description}
                   </p>
                 <p className="text-cyan-400 font-mono tracking-widest"> -{reward.cost} pts</p>
+                  <p>
+  Repeatable:
+  <input
+    type="checkbox"
+    checked={reward.repeatable}
+    onChange={() => handleRepeatableToggle(reward)}
+    className="ml-2"
+  />
+</p>
+           {reward.repeatable && (
+  <p>Gotten: {reward.gotten}x</p>
+)}
                   <p
                  className={`font-bold uppercase tracking-wider ${
                       reward.redeemed

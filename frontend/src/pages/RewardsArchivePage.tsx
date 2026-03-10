@@ -5,8 +5,10 @@ interface ArchivedReward {
   id: number;
   description: string;
   cost: number;
+  gotten: number;
   redeemed: boolean;
   state: boolean;
+  repeatable: boolean;
 }
 
 export default function RewardsArchivePage() {
@@ -63,6 +65,9 @@ return (
                     {archivedReward.description}
                   </p>
                 <p className="text-cyan-400 font-mono tracking-widest">{archivedReward.cost} pts</p>
+                  {archivedReward.gotten > 0 && (
+  <p>Gotten: {archivedReward.gotten}x</p>
+)}
                   <p
                  className={`font-bold uppercase tracking-wider ${
                       archivedReward.redeemed

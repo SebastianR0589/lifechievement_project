@@ -19,7 +19,7 @@ export default function TasksPage({ onUpdate }: PageProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [description, setDescription] = useState("");
   const [points, setPoints] = useState(0);
-  const [done, setDone] = useState(0);
+  const [done] = useState(0);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [repeatable, setRepeatable] = useState(false);
 
