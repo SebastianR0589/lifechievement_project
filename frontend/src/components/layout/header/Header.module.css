@@ -1,0 +1,20 @@
+/* nur Custom Styles */
+.logo {
+  filter: drop-shadow(0 0 10px #ff00ff) drop-shadow(0 0 25px #ff00ff);
+  animation: flicker 2s infinite;
+}
+
+.title {
+  text-shadow: 
+    0 0 5px #ff00ff,
+    0 0 10px #ff00ff,
+    0 0 20px #ff00ff,
+    0 0 40px #ff66ff;
+  animation: flicker 2s infinite;
+  font-family: 'Neonderthaw', cursive;
+}
+
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+  20%, 22%, 24%, 55% { opacity: 0.4; }
+}
