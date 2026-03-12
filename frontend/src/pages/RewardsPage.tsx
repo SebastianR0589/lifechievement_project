@@ -7,7 +7,7 @@ interface Reward {
   cost: number;
   gotten: number;
   redeemed: boolean;
-  state: boolean;
+  archived: boolean;
   repeatable: boolean;
 }
 
@@ -37,7 +37,7 @@ export default function RewardsPage({ onUpdate }: PageProps) {
       cost: Number(cost),
       gotten: Number(gotten),
       redeemed: false,
-      state: false,
+      archived: false,
       repeatable: repeatable,
     };
     axios
@@ -59,7 +59,7 @@ export default function RewardsPage({ onUpdate }: PageProps) {
       .then((response) => {
         const updated = response.data;
         setRewards((prevRewards) => {
-          if (updated.state) {
+          if (updated.archived) {
             return prevRewards.filter((r) => r.id !== reward.id);
           }
           return prevRewards.map((r) => (r.id === reward.id ? updated : r));

@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface RewardRepository extends JpaRepository<Reward, Long> {
 
-    List<Reward> findByStateFalse();
-    List<Reward> findByStateTrue();
+    List<Reward> findByArchivedFalse();
+    List<Reward> findByArchivedTrue();
 
-    Optional<Reward> findByIdAndStateFalse(Long id);
-    Optional<Reward> findByIdAndStateTrue(Long id);
+    Optional<Reward> findByIdAndArchivedFalse(Long id);
+    Optional<Reward> findByIdAndArchivedTrue(Long id);
 }

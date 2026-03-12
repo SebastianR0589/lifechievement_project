@@ -1,52 +1,52 @@
 package com.sebastianriedel.lifechievement.reward;
 
 import com.sebastianriedel.lifechievement.balance.BalanceService;
-import com.sebastianriedel.lifechievement.reward.dto.RewardCreaetDTO;
+import com.sebastianriedel.lifechievement.reward.dto.RewardCreateDTO;
 import com.sebastianriedel.lifechievement.reward.dto.RewardResponseDTO;
 import com.sebastianriedel.lifechievement.reward.dto.RewardUpdateDTO;
 import com.sebastianriedel.lifechievement.reward.ExceptionHandling.RewardNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class RewardService {
-    @Autowired
-    RewardRepository rewardRepository;
-    @Autowired
-    BalanceService balanceService;
+    private final RewardRepository rewardRepository;
+    private final BalanceService balanceService;
+
+    public RewardService(RewardRepository rewardRepository, BalanceService balanceService) {
+        this.rewardRepository = rewardRepository;
+        this.balanceService = balanceService;
+    }
 
     public List<RewardResponseDTO> getAllActiveRewards() {
-        List<Reward> rewards = rewardRepository.findByStateFalse();
+        List<Reward> rewards = rewardRepository.findByArchivedFalse();
 
-        return rewards.stream().map(reward -> new RewardResponseDTO(reward.getId(), reward.getDescription(), reward.getCost(), reward.getGotten(), reward.isRedeemed(), reward.isState(), reward.isRepeatable())).toList();
+        return rewards.stream().map(reward -> new RewardResponseDTO(reward.getId(), reward.getDescription(), reward.getCost(), reward.getGotten(), reward.isRedeemed(), reward.isArchived(), reward.isRepeatable())).toList();
     }
 
     public List<RewardResponseDTO> getAllArchivedRewards() {
-        List<Reward> rewards = rewardRepository.findByStateTrue();
+        List<Reward> rewards = rewardRepository.findByArchivedTrue();
 
-        return rewards.stream().map(reward -> new RewardResponseDTO(reward.getId(), reward.getDescription(), reward.getCost(), reward.getGotten(), reward.isRedeemed(), reward.isState(), reward.isRepeatable())).toList();
+        return rewards.stream().map(reward -> new RewardResponseDTO(reward.getId(), reward.getDescription(), reward.getCost(), reward.getGotten(), reward.isRedeemed(), reward.isArchived(), reward.isRepeatable())).toList();
     }
 
     public RewardResponseDTO getActiveRewardById(Long id) {
-        Reward reward = rewardRepository.findByIdAndStateFalse(id).orElseThrow(() -> new RewardNotFoundException(id));
+        Reward reward = rewardRepository.findByIdAndArchivedFalse(id).orElseThrow(() -> new RewardNotFoundException(id));
 
-        return new RewardResponseDTO(reward.getId(), reward.getDescription(), reward.getCost(), reward.getGotten(), reward.isRedeemed(), reward.isState(), reward.isRepeatable());
+        return new RewardResponseDTO(reward.getId(), reward.getDescription(), reward.getCost(), reward.getGotten(), reward.isRedeemed(), reward.isArchived(), reward.isRepeatable());
     }
 
     public RewardResponseDTO getArchivedRewardById(Long id) {
-        Reward reward = rewardRepository.findByIdAndStateTrue(id).orElseThrow(() -> new RewardNotFoundException(id));
+        Reward reward = rewardRepository.findByIdAndArchivedTrue(id).orElseThrow(() -> new RewardNotFoundException(id));
 
-        return new RewardResponseDTO(reward.getId(), reward.getDescription(), reward.getCost(), reward.getGotten(), reward.isRedeemed(), reward.isState(), reward.isRepeatable());
+        return new RewardResponseDTO(reward.getId(), reward.getDescription(), reward.getCost(), reward.getGotten(), reward.isRedeemed(), reward.isArchived(), reward.isRepeatable());
     }
 
-    public Reward createReward(RewardCreaetDTO dto) {
+    public Reward createReward(RewardCreateDTO dto) {
         Reward reward = new Reward();
         reward.setDescription(dto.getDescription());
         reward.setCost(dto.getCost());
-        reward.setRedeemed(dto.isRedeemed());
-        reward.setState(dto.isState());
         reward.setRepeatable(dto.isRepeatable());
 
         return rewardRepository.save(reward);
@@ -74,30 +74,23 @@ public class RewardService {
                 existingReward.setGotten(existingReward.getGotten() + 1);
                 existingReward.setRedeemed(false);
             } else {
-                existingReward.setState(true);
+                existingReward.setArchived(true);
             }
 
         }
 
         if (oldStatus && !newStatus) {
             balanceService.updateBalance(existingReward.getCost());
-            existingReward.setState(false);
+            existingReward.setArchived(false);
         }
 
         return rewardRepository.save(existingReward);
     }
 
-    public Reward archiveReward(Long id) {
-        Reward reward = rewardRepository.findByIdAndStateFalse(id).orElseThrow(() -> new RewardNotFoundException(id));
-
-        reward.setState(true);
-        return rewardRepository.save(reward);
-    }
-
     public Reward unarchiveReward(Long id) {
-        Reward reward = rewardRepository.findByIdAndStateTrue(id).orElseThrow(() -> new RewardNotFoundException(id));
+        Reward reward = rewardRepository.findByIdAndArchivedTrue(id).orElseThrow(() -> new RewardNotFoundException(id));
 
-        reward.setState(false);
+        reward.setArchived(false);
         reward.setRedeemed(false);
         reward.setGotten(0);
         return rewardRepository.save(reward);
@@ -105,22 +98,11 @@ public class RewardService {
 
 
     public void deleteActiveReward(Long id) {
-        if (rewardRepository.existsById(id)) {
             rewardRepository.deleteById(id);
-
-        } else {
-            System.out.println("Reward with" + id + " doesn't exist");
-        }
     }
 
     public void deleteArchivedReward(Long id) {
-        if (rewardRepository.existsById(id)) {
             rewardRepository.deleteById(id);
-
-        } else {
-            System.out.println("Reward with" + id + " doesn't exist");
-        }
     }
-
 
 }

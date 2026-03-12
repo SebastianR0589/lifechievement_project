@@ -7,7 +7,7 @@ interface ArchivedTask {
   points: number;
   done: number
   status: boolean;
-  state: boolean;
+  archived: boolean;
   repeatable: boolean;
 }
 
@@ -29,12 +29,12 @@ export default function TasksArchivePage() {
     });
   };
 
- const handleStateToggle = (archivedTask: ArchivedTask) => {
-    const updatedArchivedTask = { ...archivedTask, state: !archivedTask.state };
+ const handleArchivedToggle = (archivedTask: ArchivedTask) => {
+    const updatedArchivedTask = { ...archivedTask, archived: !archivedTask.archived };
     axios.patch(`http://localhost:8080/api/tasks/${archivedTask.id}/unarchive`, updatedArchivedTask).then((response) => {
       const updated = response.data;
          setArchivedTasks((prevArchivedTasks) => {
-        if (!updated.state) {
+        if (!updated.archived) {
           return prevArchivedTasks.filter((t) => t.id !== archivedTask.id);
         }
         return prevArchivedTasks.map((t) => (t.id === archivedTask.id ? updated : t));
@@ -83,7 +83,7 @@ return (
                   </p>
                 </div>
               <div className="flex gap-2 mt-2 md:mt-0">              
-                <button onClick={() => handleStateToggle(archivedTask)}
+                <button onClick={() => handleArchivedToggle(archivedTask)}
                     className="
     px-4 py-1
     border border-cyan-400

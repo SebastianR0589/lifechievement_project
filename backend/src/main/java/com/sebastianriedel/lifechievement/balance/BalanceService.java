@@ -5,8 +5,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BalanceService {
-    @Autowired
-    BalanceRepository balanceRepository;
+
+    private final BalanceRepository balanceRepository;
+
+    public BalanceService(BalanceRepository balanceRepository) {
+        this.balanceRepository = balanceRepository;
+    }
 
     public int getBalance() {
         return balanceRepository.findById(1L).orElse(new Balance(0)).getBalance();

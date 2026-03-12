@@ -7,7 +7,7 @@ interface Task {
   points: number;
   done: number;
   status: boolean;
-  state: boolean;
+  archived: boolean;
   repeatable: boolean;
 }
 
@@ -38,7 +38,7 @@ export default function TasksPage({ onUpdate }: PageProps) {
       points: Number(points),
       done: Number(done),
       status: false,
-      state: false,
+      archived: false,
       repeatable: repeatable,
     };
     axios.post("http://localhost:8080/api/tasks", newTask).then((response) => {
@@ -59,7 +59,7 @@ export default function TasksPage({ onUpdate }: PageProps) {
         const updated = response.data;
 
         setTasks((prevTasks) => {
-          if (updated.state) {
+          if (updated.archived) {
             return prevTasks.filter((t) => t.id !== task.id);
           }
           return prevTasks.map((t) => (t.id === task.id ? updated : t));

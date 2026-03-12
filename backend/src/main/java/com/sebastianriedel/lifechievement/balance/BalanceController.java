@@ -6,8 +6,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/balance")
 public class BalanceController {
-    @Autowired
-    BalanceService balanceService;
+    private final BalanceService balanceService;
+
+    public BalanceController(BalanceService balanceService) {
+        this.balanceService = balanceService;
+    }
 
     @GetMapping
     public int getBalance() {
