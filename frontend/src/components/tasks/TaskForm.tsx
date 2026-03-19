@@ -16,7 +16,7 @@ export default function TaskForm({
   setDescription,
   setPoints,
   setRepeatable,
-}: Props) {
+}: Readonly<Props>) {
   return (
     <form
       onSubmit={onSubmit}

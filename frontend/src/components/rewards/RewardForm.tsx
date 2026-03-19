@@ -16,7 +16,7 @@ export default function RewardForm({
   setDescription,
   setCost,
   setRepeatable,
-}: Props) {
+}: Readonly<Props>) {
   return (
     <form
       onSubmit={onSubmit}
