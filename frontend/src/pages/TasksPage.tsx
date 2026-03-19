@@ -1,15 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 
-interface Task {
-  id: number;
-  description: string;
-  points: number;
-  done: number;
-  status: boolean;
-  archived: boolean;
-  repeatable: boolean;
-}
+import type { Task } from "../types/Task";
+import { createTask, deleteTask, getTasks, updateTask } from "../api/taskApi";
 
 type PageProps = {
   onUpdate: () => void;
@@ -19,101 +11,90 @@ export default function TasksPage({ onUpdate }: PageProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [description, setDescription] = useState("");
   const [points, setPoints] = useState(0);
-  const [done] = useState(0);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [repeatable, setRepeatable] = useState(false);
 
 
-  useEffect(() => {
-    axios.get("http://localhost:8080/api/tasks").then((response) => {
-      setTasks(response.data);
-    });
-  }, []);
-
-  const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const newTask = {
-      description: description,
-      points: Number(points),
-      done: Number(done),
-      status: false,
-      archived: false,
-      repeatable: repeatable,
-    };
-    axios.post("http://localhost:8080/api/tasks", newTask).then((response) => {
-      console.log("POST RESPONSE:", response.data);
-      setTasks((prev) => [...prev, response.data]);
-
-      setDescription("");
-      setPoints(0);
-      setRepeatable(false);
-    });
+useEffect(() => {
+  const fetchTasks = async () => {
+    const data = await getTasks();
+    setTasks(data);
   };
 
-  const handleStatusToggle = (task: Task) => {
-    const updatedTask = { ...task, status: !task.status };
-    axios
-      .put(`http://localhost:8080/api/tasks/${task.id}`, updatedTask)
-      .then((response) => {
-        const updated = response.data;
+  fetchTasks();
+}, []);
 
-        setTasks((prevTasks) => {
-          if (updated.archived) {
-            return prevTasks.filter((t) => t.id !== task.id);
-          }
-          return prevTasks.map((t) => (t.id === task.id ? updated : t));
-        });
+const handleSubmit = async (event: React.FormEvent) => {
+  event.preventDefault();
 
-        onUpdate();
-      });
+  const newTask = {
+    description,
+    points,
+    done: 0,
+    status: false,
+    archived: false,
+    repeatable,
   };
 
-  const handleRepeatableToggle = (task: Task) => {
+  const created = await createTask(newTask);
 
-  const updatedTask = {
-    ...task,
-    repeatable: !task.repeatable
-  };
+  setTasks((prev) => [...prev, created]);
 
-  axios.put(`http://localhost:8080/api/tasks/${task.id}`, updatedTask)
-    .then((response) => {
-
-      const updated = response.data;
-
-      setTasks(prev =>
-        prev.map(t => t.id === task.id ? updated : t)
-      );
-
-    });
+  setDescription("");
+  setPoints(0);
+  setRepeatable(false);
 };
 
-  const handleDelete = (taskId: number) => {
-    axios.delete(`http://localhost:8080/api/tasks/${taskId}`).then(() => {
-      setTasks(tasks.filter((t) => t.id !== taskId));
-    });
+
+const handleStatusToggle = async (task: Task) => {
+  const updatedTask = { ...task, status: !task.status };
+
+  const updated = await updateTask(updatedTask);
+
+  setTasks((prev) =>
+    updated.archived
+      ? prev.filter((t) => t.id !== task.id)
+      : prev.map((t) => (t.id === updated.id ? updated : t))
+  );
+
+  onUpdate();
+};
+
+
+const handleRepeatableToggle = async (task: Task) => {
+  const updatedTask = {
+    ...task,
+    repeatable: !task.repeatable,
   };
 
-  const handleSave = async () => {
-    if (!editingTask) return;
+  const updated = await updateTask(updatedTask);
 
-    try {
-      const response = await axios.put(
-        `http://localhost:8080/api/tasks/${editingTask.id}`,
-        editingTask,
-      );
+  setTasks((prev) =>
+    prev.map((t) => (t.id === updated.id ? updated : t))
+  );
+};
 
-      // Den Task im State aktualisieren
-      setTasks((prev) =>
-        prev.map((task) => (task.id === editingTask.id ? response.data : task)),
-      );
+const handleDelete = async (taskId: number) => {
+  await deleteTask(taskId);
 
-      // Formular schließen
-      setEditingTask(null);
-    } catch (err) {
-      console.error("Fehler beim Speichern:", err);
-    }
-  };
+  setTasks((prev) => prev.filter((t) => t.id !== taskId));
+};
+
+const handleSave = async () => {
+  if (!editingTask) return;
+
+  try {
+    const updated = await updateTask(editingTask);
+
+    setTasks((prev) =>
+      prev.map((t) => (t.id === updated.id ? updated : t))
+    );
+
+    setEditingTask(null);
+  } catch (err) {
+    console.error("Fehler beim Speichern:", err);
+  }
+};
 
   return (
     <div className="p-6 max-w-4xl mx-auto">

@@ -4,6 +4,6 @@ export interface Reward {
   cost: number;
   gotten: number;
   redeemed: boolean;
-  state: boolean;
+  archived: boolean;
   repeatable: boolean;
 }
