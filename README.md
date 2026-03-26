@@ -40,7 +40,10 @@ Backend
 - Spring Data JPA
 
 Database
-- H2 / JPA persistence
+- PostgreSQL / JPA persistence
+
+DevOps
+-Docker
 
 ---
 
