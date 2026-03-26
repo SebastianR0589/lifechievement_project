@@ -43,7 +43,7 @@ Database
 - PostgreSQL / JPA persistence
 
 DevOps
--Docker
+- Docker
 
 ---
 
