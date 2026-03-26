@@ -44,6 +44,7 @@ Database
 
 DevOps
 - Docker
+- GitHub Actions
 
 ---
 
