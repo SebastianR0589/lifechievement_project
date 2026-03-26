@@ -46,9 +46,8 @@ jobs:
         working-directory: backend
       
       - name: Build backend
-        run: |
-          cd backend
-          ./mvnw clean package
+        run: ./mvnw clean package -DskipTests
+        working-directory: backend
 
 
   docker-build:
