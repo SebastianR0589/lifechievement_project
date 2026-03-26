@@ -29,6 +29,7 @@ function App() {
         <Navigation />
 
         <Routes>
+            <Route path="/" element={null} /> {}
           <Route path="/tasks" element={<TasksPage onUpdate={updateBalance} />} />
           <Route path="/tasks/archive" element={<TasksArchivePage />} />
           <Route path="/rewards" element={<RewardsPage onUpdate={updateBalance} />} />
