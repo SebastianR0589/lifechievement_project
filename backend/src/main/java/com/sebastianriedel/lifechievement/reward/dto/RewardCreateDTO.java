@@ -3,17 +3,13 @@ package com.sebastianriedel.lifechievement.reward.dto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
-public class RewardCreaetDTO {
+public class RewardCreateDTO {
 
     @NotBlank
     private String description;
     @Min(1)
     private int cost;
-    private int gotten;
-    private boolean redeemed;
-    private boolean state;
     private boolean repeatable;
-
 
     //Getter & Setter
 
@@ -31,30 +27,6 @@ public class RewardCreaetDTO {
 
     public void setCost(int cost) {
         this.cost = cost;
-    }
-
-    public int getGotten() {
-        return gotten;
-    }
-
-    public void setGotten(int gotten) {
-        this.gotten = gotten;
-    }
-
-    public boolean isRedeemed() {
-        return redeemed;
-    }
-
-    public void setRedeemed(boolean redeemed) {
-        this.redeemed = redeemed;
-    }
-
-    public boolean isState() {
-        return state;
-    }
-
-    public void setState(boolean state) {
-        this.state = state;
     }
 
     public boolean isRepeatable() {

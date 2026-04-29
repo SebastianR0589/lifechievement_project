@@ -1,14 +1,9 @@
 package com.sebastianriedel.lifechievement.reward;
 
-import com.sebastianriedel.lifechievement.reward.dto.RewardCreaetDTO;
+import com.sebastianriedel.lifechievement.reward.dto.RewardCreateDTO;
 import com.sebastianriedel.lifechievement.reward.dto.RewardResponseDTO;
 import com.sebastianriedel.lifechievement.reward.dto.RewardUpdateDTO;
-import com.sebastianriedel.lifechievement.task.Task;
-import com.sebastianriedel.lifechievement.task.dto.TaskCreateDTO;
-import com.sebastianriedel.lifechievement.task.dto.TaskResponseDTO;
-import com.sebastianriedel.lifechievement.task.dto.TaskUpdateDTO;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,8 +11,23 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/rewards")
 public class RewardController {
-    @Autowired
-    RewardService rewardService;
+    private final RewardService rewardService;
+
+    public RewardController(RewardService rewardService) {
+        this.rewardService = rewardService;
+    }
+
+    private RewardResponseDTO mapToDTO(Reward reward) {
+        return new RewardResponseDTO(
+                reward.getId(),
+                reward.getDescription(),
+                reward.getCost(),
+                reward.getGotten(),
+                reward.isRedeemed(),
+                reward.isArchived(),
+                reward.isRepeatable()
+        );
+    }
 
     @GetMapping
     public List<RewardResponseDTO> getActiveReward() {
@@ -40,59 +50,22 @@ public class RewardController {
     }
 
     @PostMapping
-    public RewardResponseDTO createReward(@Valid @RequestBody RewardCreaetDTO dto) {
+    public RewardResponseDTO createReward(@Valid @RequestBody RewardCreateDTO dto) {
         Reward reward = rewardService.createReward(dto);
-        return new RewardResponseDTO(
-                reward.getId(),
-                reward.getDescription(),
-                reward.getCost(),
-                reward.getGotten(),
-                reward.isRedeemed(),
-                reward.isState(),
-                reward.isRepeatable()
-        );
+        return mapToDTO(reward);
     }
 
     @PutMapping("{id}")
     public RewardResponseDTO updateReward(@Valid @RequestBody RewardUpdateDTO dto, @PathVariable Long id) {
         Reward reward = rewardService.updateReward(dto, id);
-        return new RewardResponseDTO(
-                reward.getId(),
-                reward.getDescription(),
-                reward.getCost(),
-                reward.getGotten(),
-                reward.isRedeemed(),
-                reward.isState(),
-                reward.isRepeatable()
-        );
+        return mapToDTO(reward);
     }
 
-    @PatchMapping("/{id}/archive")
-    public RewardResponseDTO archiveTask(@PathVariable Long id) {
-        Reward reward = rewardService.archiveReward(id);
-        return new RewardResponseDTO(
-                reward.getId(),
-                reward.getDescription(),
-                reward.getCost(),
-                reward.getGotten(),
-                reward.isRedeemed(),
-                reward.isState(),
-                reward.isRepeatable()
-        );
-    }
 
     @PatchMapping("/{id}/unarchive")
-    public RewardResponseDTO unarchiveTask(@PathVariable Long id) {
+    public RewardResponseDTO unarchiveReward(@PathVariable Long id) {
         Reward reward = rewardService.unarchiveReward(id);
-        return new RewardResponseDTO(
-                reward.getId(),
-                reward.getDescription(),
-                reward.getCost(),
-                reward.getGotten(),
-                reward.isRedeemed(),
-                reward.isState(),
-                reward.isRepeatable()
-        );
+        return mapToDTO(reward);
     }
 
 

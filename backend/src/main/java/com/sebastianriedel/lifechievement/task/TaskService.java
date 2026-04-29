@@ -5,22 +5,24 @@ import com.sebastianriedel.lifechievement.task.ExceptionHandling.TaskNotFoundExc
 import com.sebastianriedel.lifechievement.task.dto.TaskCreateDTO;
 import com.sebastianriedel.lifechievement.task.dto.TaskResponseDTO;
 import com.sebastianriedel.lifechievement.task.dto.TaskUpdateDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TaskService {
-    @Autowired
-    TaskRepository taskRepository;
-    @Autowired
-    BalanceService balanceService;
+    private final TaskRepository taskRepository;
+    private final BalanceService balanceService;
+
+    public TaskService(TaskRepository taskRepository, BalanceService balanceService) {
+        this.taskRepository = taskRepository;
+        this.balanceService = balanceService;
+    }
 
     public List<TaskResponseDTO> getAllActiveTasks() {
 
-        List<Task> tasks = taskRepository.findByStateFalse();
+        List<Task> tasks = taskRepository.findByArchivedFalse();
 
         return tasks.stream()
                 .map(task -> new TaskResponseDTO(
@@ -29,14 +31,14 @@ public class TaskService {
                         task.getPoints(),
                         task.getDone(),
                         task.isStatus(),
-                        task.isState(),
+                        task.isArchived(),
                         task.isRepeatable()
                 ))
                 .toList();
     }
 
     public List<TaskResponseDTO> getAllArchivedTasks() {
-        List<Task> tasks = taskRepository.findByStateTrue();
+        List<Task> tasks = taskRepository.findByArchivedTrue();
 
         return tasks.stream()
                 .map(task -> new TaskResponseDTO(
@@ -45,7 +47,7 @@ public class TaskService {
                         task.getPoints(),
                         task.getDone(),
                         task.isStatus(),
-                        task.isState(),
+                        task.isArchived(),
                         task.isRepeatable()
                 ))
                 .toList();
@@ -54,7 +56,7 @@ public class TaskService {
 
     public TaskResponseDTO getActiveTaskById(Long id) {
 
-        Task task = taskRepository.findByIdAndStateFalse(id)
+        Task task = taskRepository.findByIdAndArchivedFalse(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
 
         return new TaskResponseDTO(
@@ -63,14 +65,14 @@ public class TaskService {
                 task.getPoints(),
                 task.getDone(),
                 task.isStatus(),
-                task.isState(),
+                task.isArchived(),
                 task.isRepeatable()
         );
     }
 
     public TaskResponseDTO getArchivedTaskById(Long id) {
 
-        Task task = taskRepository.findByIdAndStateTrue(id)
+        Task task = taskRepository.findByIdAndArchivedTrue(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
 
         return new TaskResponseDTO(
@@ -79,7 +81,7 @@ public class TaskService {
                 task.getPoints(),
                 task.getDone(),
                 task.isStatus(),
-                task.isState(),
+                task.isArchived(),
                 task.isRepeatable()
         );
     }
@@ -90,8 +92,6 @@ public class TaskService {
         Task task = new Task();
         task.setDescription(dto.getDescription());
         task.setPoints(dto.getPoints());
-        task.setStatus(dto.isStatus());
-        task.setState(dto.isState());
         task.setRepeatable(dto.isRepeatable());
 
         return taskRepository.save(task);
@@ -117,49 +117,33 @@ public class TaskService {
                 existingTask.setDone(existingTask.getDone() + 1);
                 existingTask.setStatus(false);
             } else {
-                existingTask.setState(true);
+                existingTask.setArchived(true);
             }
         }
         if (oldStatus && !newStatus) {
             balanceService.updateBalance(-existingTask.getPoints());
-            existingTask.setState(false);
+            existingTask.setArchived(false);
         }
 
         return taskRepository.save(existingTask);
     }
 
-    public Task archiveTask(Long id) {
-        Task task = taskRepository.findByIdAndStateFalse(id)
-                .orElseThrow(() -> new TaskNotFoundException(id));
-
-        task.setState(true);
-        return taskRepository.save(task);
-    }
-
     public Task unarchiveTask(Long id) {
-        Task task = taskRepository.findByIdAndStateTrue(id)
+        Task task = taskRepository.findByIdAndArchivedTrue(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
 
-        task.setState(false);
+        task.setArchived(false);
         task.setStatus(false);
         task.setDone(0);
         return taskRepository.save(task);
     }
 
     public void deleteActiveTask(Long id) {
-        if (taskRepository.existsById(id)) {
             taskRepository.deleteById(id);
-        } else {
-            System.out.println("Task with " + id + " doesn't exist.");
-        }
     }
 
     public void deleteArchivedTask(Long id) {
-        if (taskRepository.existsById(id)) {
             taskRepository.deleteById(id);
-        } else {
-            System.out.println("Task with " + id + " doesn't exist.");
-        }
     }
 
 }

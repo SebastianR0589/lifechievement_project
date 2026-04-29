@@ -11,9 +11,7 @@ public class TaskUpdateDTO {
     @Min(1)
     @Max(1000)
     private int points;
-    private int done;
     private boolean status;
-    private boolean state;
     private boolean repeatable;
 
     // Getter + Setter
@@ -34,28 +32,12 @@ public class TaskUpdateDTO {
         this.points = points;
     }
 
-    public int getDone() {
-        return done;
-    }
-
-    public void setDone(int done) {
-        this.done = done;
-    }
-
     public boolean isStatus() {
         return status;
     }
 
     public void setStatus(boolean status) {
         this.status = status;
-    }
-
-    public boolean isState() {
-        return state;
-    }
-
-    public void setState(boolean state) {
-        this.state = state;
     }
 
     public boolean isRepeatable() {

@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
-    List<Task> findByStateFalse();
+    List<Task> findByArchivedFalse();
 
-    List<Task> findByStateTrue();
+    List<Task> findByArchivedTrue();
 
-    Optional<Task> findByIdAndStateFalse(Long id);
-    Optional<Task> findByIdAndStateTrue(Long id);
+    Optional<Task> findByIdAndArchivedFalse(Long id);
+    Optional<Task> findByIdAndArchivedTrue(Long id);
 
 }
