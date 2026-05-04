@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "tailwind:build": "tailwindcss -i ./src/index.css -o ./dist/output.css --watch",
-     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "dependencies": {
     "@fontsource/orbitron": "^5.2.8",
@@ -22,12 +22,14 @@
     "@babel/core": "^7.29.0",
     "@babel/preset-env": "^7.29.3",
     "@babel/preset-react": "^7.28.5",
+    "@babel/preset-typescript": "^7.28.5",
     "@eslint/js": "^9.39.1",
     "@tailwindcss/postcss": "^4.2.1",
     "@tailwindcss/vite": "^4.2.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
