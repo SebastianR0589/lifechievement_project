@@ -27,10 +27,11 @@ export default function TaskForm({
       }}
     >
       <div className="mb-4">
-        <label className="block text-cyan-400 uppercase tracking-widest mb-1">
+        <label htmlFor="description" className="block text-cyan-400 uppercase tracking-widest mb-1">
           Description:
         </label>
         <input
+        id="description"
           type="text"
           name="description"
           value={description}
@@ -40,10 +41,11 @@ export default function TaskForm({
       </div>
 
       <div className="mb-4">
-        <label className="block text-cyan-400 uppercase tracking-widest mb-1">
+        <label htmlFor="points" className="block text-cyan-400 uppercase tracking-widest mb-1">
           Points:
         </label>
         <input
+        id="points"
           type="number"
           name="points"
           value={points}
@@ -54,13 +56,14 @@ export default function TaskForm({
 
       <div className="mb-4 flex items-center gap-2">
         <input
+        id="repeatable"
           type="checkbox"
           name="repeatable"
           checked={repeatable}
           onChange={(e) => setRepeatable(e.target.checked)}
           className="form-checkbox h-5 w-5 text-cyan-500 focus:ring-cyan-400 border-cyan-500"
         />
-        <label className="block text-cyan-400 uppercase tracking-widest mb-1">
+        <label htmlFor="repeatable" className="block text-cyan-400 uppercase tracking-widest mb-1">
           Repeatable:
         </label>
       </div>
