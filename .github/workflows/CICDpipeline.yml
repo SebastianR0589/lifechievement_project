@@ -24,6 +24,11 @@ jobs:
         run: |
           cd frontend
           npm ci # 'npm ci' ist schneller und sicherer in Pipelines als 'npm install'
+
+      - name: Run ESLint
+        run: |
+          cd frontend
+          npm run lint
       
       - name: Run Frontend Tests
         run: |
@@ -49,6 +54,11 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
+
+      - name: Backend Checkstyle (Lint)
+        run: |
+          cd backend
+          ./mvnw checkstyle:check
 
       - name: Make mvnw executable
         run: chmod +x mvnw
