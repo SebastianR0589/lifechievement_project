@@ -55,7 +55,7 @@ jobs:
         working-directory: backend
       
       - name: Build backend
-        run: ./mvnw clean package
+        run: ./mvnw clean package -e -X
         working-directory: backend
 
 
