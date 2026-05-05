@@ -24,6 +24,7 @@ Users can add Tasks and Rewards and define each with a description and points or
 - Automatic point balance calculation based on completed tasks
 - Dynamic UI updates without full page reloads
 - Simple multi-page navigation between Tasks and Rewards
+- Unit and integration tests in frontend and backend
 
 ---
 
@@ -44,6 +45,11 @@ Database
 
 DevOps
 - Docker
+- GitHub Actions Pipeline
+
+Testing
+- JUnit and Mockito backend testing
+- Jest and RTL frontend testing
 
 ---
 
