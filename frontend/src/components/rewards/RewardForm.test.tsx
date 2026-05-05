@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import RewardForm from './RewardForm';
-import TaskForm from '../tasks/TaskForm';
 
 describe('RewardForm Component', () => {
   const mockSubmit = jest.fn((e) => e.preventDefault());

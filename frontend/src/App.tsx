@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import { BrowserRouter as Routes, Route} from 'react-router-dom';
 import { useState} from "react";
 import axios from "axios";
 import TasksPage from './pages/TasksPage';
@@ -22,7 +22,9 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+   <div className={`min-h-screen bg-slate-950 text-slate-100 flex flex-col transition-colors duration-500 ${
+      flash === "gain" ? "bg-green-900/20" : flash === "loss" ? "bg-red-900/20" : ""
+    }`}>
       <Header balance={balance}/>
 
       <main className="flex-1 max-w-6xl mx-auto w-full px-6 py-10">
