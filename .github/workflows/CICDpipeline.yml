@@ -58,6 +58,7 @@ jobs:
       - name: Backend Checkstyle (Lint)
         run: |
           cd backend
+          chmod +x mvnw
           ./mvnw checkstyle:check
 
       - name: Make mvnw executable
