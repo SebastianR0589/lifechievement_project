@@ -48,9 +48,12 @@ DevOps
 - GitHub Actions Pipeline
 
 Testing
-- JUnit and Mockito backend testing
-- Jest and RTL frontend testing
+- JUnit and Mockito Backend testing
+- Jest and RTL Frontend testing
 
+Linter
+- Checkstyle for Backend
+- ESLint for Frontend
 ---
 
 ## Screenshots
