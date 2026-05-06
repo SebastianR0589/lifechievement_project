@@ -1,7 +1,7 @@
 # Sebastian Riedel Portfolio
 # Lifechievement
 
-This project is a fullstack application built with React, TypeScript, Java Spring Boot and H2/JPA with hibernate.  It demonstrates managing frontend state, interacting with a backend API, and persisting data in a database.
+This project is a fullstack application built with React, TypeScript, Java Spring Boot and PostgreSQL/JPA with hibernate (h2 for testing).  It demonstrates managing frontend state, interacting with a backend API, and persisting data in a database.
 
 Users can add Tasks and Rewards and define each with a description and points or costs. The user can then modify those tasks and rewards, update them, change their status, delete them. All data is stored persistently in H2/JPA and synchronized with the React frontend via REST API calls.
 
