@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react"; 
 import styles from "./Balance.module.css";
 
 type FlashType = "gain" | "loss" | null;
@@ -7,7 +7,6 @@ type BalanceProps = {
   balance: number;
 };
 
-// zentrale Styles
 const textStyle: React.CSSProperties = {
   textShadow: `
     0 0 5px #ff00ff,
@@ -19,21 +18,17 @@ const textStyle: React.CSSProperties = {
 };
 
 export default function Balance({ balance }: BalanceProps) {
-  const prevBalance = useRef(balance);
+  const [prevBalance, setPrevBalance] = useState(balance);
   const [flash, setFlash] = useState<FlashType>(null);
 
-  useEffect(() => {
-    if (balance > prevBalance.current) setFlash("gain");
-    else if (balance < prevBalance.current) setFlash("loss");
-    else setFlash(null);
+  if (balance !== prevBalance) {
+    setPrevBalance(balance);
+    setFlash(balance > prevBalance ? "gain" : "loss");
 
-    const timeout = setTimeout(() => {
+    setTimeout(() => {
       setFlash(null);
-      prevBalance.current = balance;
     }, 500);
-
-    return () => clearTimeout(timeout);
-  }, [balance]);
+  }
 
   return (
     <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center space-x-3">
@@ -43,7 +38,7 @@ export default function Balance({ balance }: BalanceProps) {
 
       <h2
         className={`text-4xl font-bold text-neonPink transition-all duration-300 
-       ${styles.flicker} ${flash === "gain" ? styles.gain : ""} ${flash === "loss" ? styles.loss : ""}`}
+        ${styles.flicker} ${flash === "gain" ? styles.gain : ""} ${flash === "loss" ? styles.loss : ""}`}
         style={textStyle}
       >
         {balance}
